@@ -18,7 +18,7 @@ router.get('/contact', function(req, res, next) {
 
 /* GET game page. */
 router.get('/game', function(req, res, next) {
-  res.render('game', { title: 'Play Game' });
+  res.render('game', { title: 'Play' });
 });
 
 module.exports = router;
