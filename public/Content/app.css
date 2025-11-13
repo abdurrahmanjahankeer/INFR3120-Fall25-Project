@@ -23,9 +23,13 @@ body{
     margin-top: 30px;
     margin-bottom: 30px;
 }
-.bottom-links {
+.homepage-title h1{
+    font-size: 60px;
+    font-weight: bold;
+}
+.bottom-links{
     text-align: center;
-    margin-top: 40px;
+    margin-top: 30px;
     padding-bottom: 100px;
 }
 .bottom-links a{
@@ -37,7 +41,7 @@ body{
 .box{
     width: 200px;
     height: 70px;
-    margin: 20px auto;
+    margin: 15.5px auto;
     text-align: center;
     background-color: black;
     border-radius: 75px;
