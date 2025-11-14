@@ -1,0 +1,69 @@
+<%- include ('./partials/header.ejs') %>
+<%- include ('../partials/main_nav.ejs') %>
+
+<!--Main content-->
+<main class="container">
+    <div class="row">
+        <div class="offset-md-1 col-md-10">
+            <h1><%= title %></h1>
+            <% if(typeof displayName=='string' && displayName) { %>
+                <a href="/typingRecords/add" class="btn btn-primary" role="button">
+                <i class="fas fa-plus-circle"></i> Add a Record
+            </a>
+            <% } %>
+            <table class="table table-bordered table-striped table-hover">
+            <% if(typeof displayName=='string' && displayName) { %>
+                <!--Header Row-->
+                <tr class="d-flex">
+                    <th class="text-center col-2">Username</th>
+                    <th class="text-center col-1">WPM</th>
+                    <th class="text-center col-1">Accuracy</th>
+                    <th class="text-center col-1">Time (s)</th>
+                    <th class="col-4">Text Prompt</th>
+                    <th class="text-center col-1"></th>
+                    <th class="text-center col-1"></th>
+                </tr>
+                <% for(let count=0; count<RecordList.length;count++) { %>
+                    <tr class="d-flex">
+                        <td class="text-center col-2"><%= RecordList[count].username %></td>
+                        <td class="text-center col-1"><%= RecordList[count].wordsPerMinute %></td>
+                        <td class="text-center col-1"><%= RecordList[count].accuracy %>%</td>
+                        <td class="text-center col-1"><%= RecordList[count].timeTaken %></td>
+                        <td class="col-4"><%= RecordList[count].textPrompt %></td>
+                        <td class="text-center col-1">
+                        <a href="/typingRecords/edit/<%= RecordList[count]._id%>" 
+                            class="btn btn-primary btn-sm">
+                            <i class="fas fa-pencil-alt"></i> Edit
+                        </a></td>
+                        <td class="text-center col-1">
+                            <a href="/typingRecords/delete/<%= RecordList[count]._id%>" 
+                            class="btn btn-danger btn-sm"> 
+                            <i class="fas fa-trash-alt"></i> Delete</a></td>
+                    </tr>
+                <% } %>
+                <% } else { %>
+                    <!--Header Row-->
+                <tr class="d-flex">
+                    <th class="text-center col-3">Username</th>
+                    <th class="text-center col-2">WPM</th>
+                    <th class="text-center col-2">Accuracy</th>
+                    <th class="text-center col-2">Time (s)</th>
+                    <th class="col-3">Text Prompt</th>
+                </tr>
+                <% for(let count=0; count<RecordList.length;count++) { %>
+                    <tr class="d-flex">
+                        <td class="text-center col-3"><%= RecordList[count].username %></td>
+                        <td class="text-center col-2"><%= RecordList[count].wordsPerMinute %></td>
+                        <td class="text-center col-2"><%= RecordList[count].accuracy %>%</td>
+                        <td class="text-center col-2"><%= RecordList[count].timeTaken %></td>
+                        <td class="col-3"><%= RecordList[count].textPrompt %></td>                        
+                    </tr>
+                <% } %>
+                <% } %>
+            </table>
+        </div>
+    </div>
+</main>
+<br>
+<br>
+<%- include ('../partials/footer.ejs') %>
