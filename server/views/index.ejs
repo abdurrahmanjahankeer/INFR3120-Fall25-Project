@@ -1,17 +1,25 @@
-<%- include partials/header.ejs %>
-<%- include partials/main_nav.ejs %>
+<%- include('partials/header') %>
+<%- include('partials/main_nav') %>
 
-<div class="homepage-title"><h1>Welcome To The ADA Type Writer</h1></div>
-
-<div class="bottom-links">
-  <div class="box"><a href="/game">Play</a></div>
-  <div class="box"><a href="/about">About Us</a></div>
-  <div class="box"><a href="/contact">Contact Us</a></div>
+<div class="homepage-title">
+    <h1>Welcome To The ADA Type Writer</h1>
 </div>
 
-<!-- Logo at the bottom of the page -->
-<div style="text-align: center; margin-top: -150px; margin-bottom: -88px;">
+<div class="bottom-links">
+    <div class="box">
+        <a href="/game">Play</a>
+    </div>
+    <div class="box">
+        <a href="/about">About Us</a>
+    </div>
+    <div class="box">
+        <a href="/contact">Contact Us</a>
+    </div>
+</div>
+
+<!-- Logo at bottom -->
+<div style="text-align: center; margin-top: -170px;">
     <img src="/Asset/images/ADA Type Racer.png" alt="ADA Type Racer Logo" style="width: 300px; height: 300px; border-radius: 50%;">
 </div>
 
-<%- include partials/footer.ejs %>
+<%- include('partials/footer') %>

@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-var app = require('./app');
+var app = require('./server/config/app');
 var debug = require('debug')('INFR3120-Fall25-PROJECT:server');
 var http = require('http');
 

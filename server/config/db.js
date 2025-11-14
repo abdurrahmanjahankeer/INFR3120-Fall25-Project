@@ -1,4 +1,1 @@
-module.exports = {
-    db: 'mongodb+srv://ada-type-writer-group-4:MbCRMorldtlggc9K@cluster0.ji4juks.mongodb.net/ada-type-racer?retryWrites=true&w=majority',
-    
-}
+module.exports = {"URI":"mongodb+srv://ada-type-writer-group-4:MbCRMorldtlggc9K@cluster0.ji4juks.mongodb.net/ada-type-racer"}
