@@ -1,0 +1,54 @@
+<%- include (./partials/header.ejs) %>
+<%- include (../partials/main_nav.ejs) %>
+<div class="container">
+    <div class="row">
+        <div class="offset-md-3 col-md-6">
+            <h1><%= title %></h1>
+            <form class="form" method="post">
+                <div class="form-group">
+                    <label for="usernameTextField">Username</label>
+                    <input type="text" class="form-control"
+                    id="usernameTextField"
+                    placeholder="Enter username"
+                    name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="wpmTextField">Words Per Minute</label>
+                    <input type="number" class="form-control"
+                    id="wpmTextField"
+                    placeholder="Enter WPM"
+                    name="wordsPerMinute" required>
+                </div>
+                <div class="form-group">
+                    <label for="accuracyTextField">Accuracy (%)</label>
+                    <input type="number" class="form-control"
+                    id="accuracyTextField"
+                    placeholder="Enter accuracy percentage"
+                    name="accuracy" required>
+                </div>
+                <div class="form-group">
+                    <label for="timeTextField">Time Taken (seconds)</label>
+                    <input type="number" class="form-control"
+                    id="timeTextField"
+                    placeholder="Enter time in seconds"
+                    name="timeTaken" required>
+                </div>
+                <div class="form-group">
+                    <label for="textPromptTextArea">Text Prompt</label>
+                    <textarea type="text" class="form-control"
+                    id="textPromptTextArea"
+                    placeholder="Enter the text that was typed"
+                    name="textPrompt" required></textarea>
+                </div>
+                <br>
+                <button class="btn btn-primary" type="submit">
+                    <i class="fas fa-edit"></i> Submit
+                </button>
+                <a href="/typingRecords" class="btn btn-warning">
+                    <i class="fas fa-undo"></i> Cancel
+                </a>
+            </form>
+        </div>
+    </div>
+</div>
+<%- include (../partials/footer.ejs) %>
