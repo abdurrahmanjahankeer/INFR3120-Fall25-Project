@@ -1,6 +1,18 @@
 {
   "name": "infr3120-fall25-project",
   "version": "0.0.0",
+  "description": "Type Racer Project in Web and Script Programming Class",
+  "homepage": "https://github.com/abdurrahmanjahankeer/INFR3120-Fall25-Project#readme",
+  "bugs": {
+    "url": "https://github.com/abdurrahmanjahankeer/INFR3120-Fall25-Project/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abdurrahmanjahankeer/INFR3120-Fall25-Project.git"
+  },
+  "license": "ISC",
+  "author": "Abdurrahman Jahankeer",
+  "type": "commonjs",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -25,5 +37,6 @@
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^8.0.0",
     "popper.js": "^1.16.1"
-  }
+  },
+  "devDependencies": {}
 }

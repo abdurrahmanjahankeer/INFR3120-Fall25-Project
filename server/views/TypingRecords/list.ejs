@@ -1,5 +1,5 @@
-<%- include ../partials/header %>
-<%- include ../partials/main_nav %>
+<%- include ('../partials/header') %>
+<%- include ('../partials/main_nav') %>
 
 <!--Main content-->
 <main class="container">
@@ -27,18 +27,19 @@
                     <tr class="d-flex">
                         <td class="text-center col-2"><%= RecordList[count].username %></td>
                         <td class="text-center col-1"><%= RecordList[count].wordsPerMinute %></td>
-                        <td class="text-center col-1"><%= RecordList[count].accuracy %>%</td>
+                        <td class="text-center col-1"><%= RecordList[count].accuracy %></td>
                         <td class="text-center col-1"><%= RecordList[count].timeTaken %></td>
                         <td class="col-4"><%= RecordList[count].textPrompt %></td>
                         <td class="text-center col-1">
-                        <a href="/typingRecords/edit/<%= RecordList[count]._id %>" 
+                        <a href="/typingRecords/edit/<%= RecordList[count]._id%>" 
                             class="btn btn-primary btn-sm">
                             <i class="fas fa-pencil-alt"></i> Edit
                         </a></td>
                         <td class="text-center col-1">
-                            <a href="/typingRecords/delete/<%= RecordList[count]._id %>" 
+                            <a href="/typingRecords/delete/<%= RecordList[count]._id%>" 
                             class="btn btn-danger btn-sm"> 
                             <i class="fas fa-trash-alt"></i> Delete</a></td>
+                        
                     </tr>
                 <% } %>
             <% } else { %>
@@ -54,7 +55,7 @@
                     <tr class="d-flex">
                         <td class="text-center col-3"><%= RecordList[count].username %></td>
                         <td class="text-center col-2"><%= RecordList[count].wordsPerMinute %></td>
-                        <td class="text-center col-2"><%= RecordList[count].accuracy %>%</td>
+                        <td class="text-center col-2"><%= RecordList[count].accuracy %></td>
                         <td class="text-center col-2"><%= RecordList[count].timeTaken %></td>
                         <td class="col-3"><%= RecordList[count].textPrompt %></td>                        
                     </tr>
@@ -66,4 +67,4 @@
 </main>
 <br>
 <br>
-<%- include ../partials/footer %>
+<%- include ('../partials/footer.ejs') %>
