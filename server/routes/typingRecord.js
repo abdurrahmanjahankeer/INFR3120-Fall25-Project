@@ -4,14 +4,14 @@ let mongoose = require('mongoose');
 
 // Connect to our TypingRecord model
 let TypingRecord = require('../model/typingRecord');
-
+/*
 function requireAuth(req, res, next) {
     if (!req.isAuthenticated()) {
         return res.redirect('/login');
     }
     next();
 }
-
+*/
 // GET route for displaying the data from DB --> Read Operation
 router.get('/', async (req, res, next) => {
     try {

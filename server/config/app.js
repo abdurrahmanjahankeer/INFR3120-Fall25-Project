@@ -28,7 +28,7 @@ mongoDB.once('open', () => {
 
 
 var indexRouter = require('../routes/index');
-/* var typingRecordRouter = require('../routes/typingRecord'); */
+var typingRecordRouter = require('../routes/typingRecord');
 var usersRouter = require('../routes/users');
 
 var app = express();
@@ -45,7 +45,7 @@ app.use(express.static(path.join(__dirname, '../../public')));
 app.use(express.static(path.join(__dirname, '../../node_modules')));
 
 app.use('/', indexRouter);
-/* app.use('/typingRecords', typingRecordRouter); */
+app.use('/typingRecords', typingRecordRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
