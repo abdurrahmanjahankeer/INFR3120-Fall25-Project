@@ -1,0 +1,4 @@
+module.exports = {
+    db: 'mongodb+srv://ada-type-writer-group-4:MbCRMorldtlggc9K@cluster0.ji4juks.mongodb.net/',
+    
+}
