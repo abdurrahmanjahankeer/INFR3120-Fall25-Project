@@ -4,8 +4,6 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-let mongoose = require('mongoose');
-let DB = require('./db');
 
 // COMMENTED OUT DATABASE - Add back later when needed
 /*
@@ -19,13 +17,18 @@ let userModel = require('../model/user');
 let User = userModel.User;
 */
 
+/* I ADDED THIS v */
+const mongoose = require('mongoose');
+const DB = require('./db');
+
+console.log('Loaded Mongo URI:', DB.URI);
 mongoose.connect(DB.URI);
 let mongoDB = mongoose.connection;
-mongoDB.on('error', console.error.bind('console', 'Connection Error'));
+mongoDB.on('error', console.error.bind(console, 'Connection Error'));
 mongoDB.once('open', () => {
-  console.log('Connected to the MongoDB');
+  console.log('Connected to MongoDB');
 });
-
+/* I ADDED THIS ^ */
 
 var indexRouter = require('../routes/index');
 var typingRecordRouter = require('../routes/typingRecord');

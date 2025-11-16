@@ -1,4 +1,4 @@
-//IIFI or Immediately invoed function expression
+//IIFE or Immediately invoed function expression
 (function(){
     function start(){
         console.log("App started...")
@@ -6,3 +6,6 @@
     }
     window.addEventListener("load",start);
 })();
+
+
+

@@ -1,1 +1,4 @@
-module.exports = {"URI":"mongodb+srv://ada-type-writer-group-4:MbCRMorldtlggc9K@cluster0.ji4juks.mongodb.net/ada-type-racer"}
+/* I moved the URL to .env to hide the secret MongoDB password */
+
+require('dotenv').config();
+module.exports = {URI: process.env.MONGO_URI};
