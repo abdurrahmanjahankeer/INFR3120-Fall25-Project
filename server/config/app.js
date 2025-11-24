@@ -13,8 +13,7 @@ let cors = require('cors');
 let userModel = require('../model/user');
 let User = userModel.User;
 
-/* I ADDED THIS v */
-const mongoose = require('mongoose');
+let mongoose = require('mongoose');
 const DB = require('./db');
 
 console.log('Loaded Mongo URI:', DB.URI);
@@ -24,13 +23,32 @@ mongoDB.on('error', console.error.bind(console, 'Connection Error'));
 mongoDB.once('open', () => {
   console.log('Connected to MongoDB');
 });
-/* I ADDED THIS ^ */
 
 var indexRouter = require('../routes/index');
 var typingRecordRouter = require('../routes/typingRecord');
 var usersRouter = require('../routes/users');
 
 var app = express();
+
+// Set-up Express Session
+app.use(session({
+  secret:"Somesecret",
+  saveUninitialized:false,
+  resave:false
+}))
+// initialize flash
+app.use(flash());
+
+// user authentication
+passport.use(User.createStrategy());
+
+// serialize and deserialize the user information
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+// initialize the passport
+app.use(passport.initialize());
+app.use(passport.session());
 
 // view engine setup
 app.set('views', path.join(__dirname, '../views'));
@@ -57,7 +75,7 @@ app.use(function(err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
   
-  // FIX: Pass title to error page
+  // render the error page
   res.status(err.status || 500);
   res.render('error', { title: 'Error' });
 });
