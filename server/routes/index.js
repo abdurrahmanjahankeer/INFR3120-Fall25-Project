@@ -5,7 +5,7 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
   res.render('index', { 
     title: 'Home',
-    displayName: ""
+    displayName: req.user ? req.user.displayName : ""
   });
 });
 
@@ -13,7 +13,7 @@ router.get('/', function(req, res, next) {
 router.get('/game', function(req, res, next) {
   res.render('game', { 
     title: 'Play',
-    displayName: ""
+    displayName: req.user ? req.user.displayName : ""
   });
 });
 
@@ -21,7 +21,7 @@ router.get('/game', function(req, res, next) {
 router.get('/about', function(req, res, next) {
   res.render('about', { 
     title: 'About',
-    displayName: ""
+    displayName: req.user ? req.user.displayName : ""
   });
 });
 
@@ -29,7 +29,7 @@ router.get('/about', function(req, res, next) {
 router.get('/contact', function(req, res, next) {
   res.render('contact', { 
     title: 'Contact',
-    displayName: ""
+    displayName: req.user ? req.user.displayName : ""
   });
 });
 

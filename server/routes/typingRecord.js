@@ -2,7 +2,16 @@ let express = require('express');
 let router = express.Router();
 let mongoose = require('mongoose');
 // Connect to our TypingRecord model
-let TypingRecord = require('../model/typingRecord');
+let TypingRecord = require('../model/TypingRecord');
+
+function requireAuth(req,res,next)
+{
+    if(!req.isAuthenticated())
+    {
+        return res.redirect('/login')
+    }
+    next();
+}
 
 // GET route for displaying the data from DB --> Read Operation
 router.get('/', async (req, res, next) => {
@@ -11,7 +20,7 @@ router.get('/', async (req, res, next) => {
         res.render('TypingRecords/list', {
             title: 'Typing Records',
             RecordList: RecordList,
-            displayName: "" // Empty since no authentication yet
+            displayName: req.user ? req.user.displayName : ""
         });
     }
     catch (err) {
@@ -20,7 +29,7 @@ router.get('/', async (req, res, next) => {
             error: 'Error on the Server',
             title: 'Error',
             RecordList: [],
-            displayName: ""
+            displayName: req.user ? req.user.displayName : ""
         });
     }
 });
@@ -30,7 +39,7 @@ router.get('/add', async (req, res, next) => {
     try {
         res.render('TypingRecords/add', {
             title: 'Add Typing Record',
-            displayName: ""
+            displayName: req.user ? req.user.displayName : ""
         });
     }
     catch (err) {
@@ -39,7 +48,7 @@ router.get('/add', async (req, res, next) => {
             error: 'Error on the Server',
             title: 'Error',
             RecordList: [],
-            displayName: ""
+            displayName: req.user ? req.user.displayName : ""
         });
     }
 });
@@ -65,7 +74,7 @@ router.post('/add', async (req, res, next) => {
             error: 'Error on the Server',
             title: 'Error',
             RecordList: [],
-            displayName: ""
+            displayName: req.user ? req.user.displayName : ""
         });
     }
 });
@@ -78,7 +87,7 @@ router.get('/edit/:id', async (req, res, next) => {
         res.render("TypingRecords/edit", {
             title: 'Edit Typing Record',
             Record: recordToEdit,
-            displayName: ""
+            displayName: req.user ? req.user.displayName : ""
         });
     }
     catch (err) {
