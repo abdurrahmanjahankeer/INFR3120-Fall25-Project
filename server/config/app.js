@@ -4,9 +4,6 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-
-// COMMENTED OUT DATABASE - Add back later when needed
-/*
 let session = require('express-session');
 let passport = require('passport');
 let passportLocal = require('passport-local');
@@ -15,7 +12,6 @@ let flash = require('connect-flash');
 let cors = require('cors');
 let userModel = require('../model/user');
 let User = userModel.User;
-*/
 
 /* I ADDED THIS v */
 const mongoose = require('mongoose');

@@ -1,4 +1,4 @@
-//IIFE or Immediately invoed function expression
+//IIFE or Immediately invoked function expression
 (function(){
     function start(){
         console.log("App started...")
