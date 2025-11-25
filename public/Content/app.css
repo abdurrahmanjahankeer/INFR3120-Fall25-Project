@@ -166,32 +166,31 @@ form textarea{
 }
 
 /* buttons */
-form input[type="submit"],
-form input[type="reset"]{
+.contact-btn{
     padding: 10px 25px;
     font-size: 30px;
     font-weight: bold;
     border-radius: 5px;
     border: none;
-    width: 766px;
+    width: 760px;
     margin-right: 10px;
 }
 
-form input[type="submit"]{
+.contact-btn[type="submit"]{
     background-color: blue;
     color: white;
 }
 
-form input[type="submit"]:hover{
+.contact-btn[type="submit"]:hover{
     background-color: darkblue;
 }
 
-form input[type="reset"]{
+.contact-btn[type="reset"]{
     background-color: blue;
     color: white;
 }
 
-form input[type="reset"]:hover{
+.contact-btn[type="reset"]:hover{
     background-color: darkblue;
 }
 article h2,
@@ -202,7 +201,8 @@ article p{
 }
 article h2{
     margin-top: 50px;
+    font-weight: bold;
 }
 article p{
-    font-size: 25px;
+    font-size: 30px;
 }

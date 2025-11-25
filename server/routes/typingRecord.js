@@ -1,3 +1,6 @@
+let userModel = require('../model/user');
+let User = userModel.User;
+
 let express = require('express');
 let router = express.Router();
 let mongoose = require('mongoose');
@@ -18,7 +21,7 @@ router.get('/', async (req, res, next) => {
     try {
         const RecordList = await TypingRecord.find();
         res.render('TypingRecords/list', {
-            title: 'Typing Records',
+            title: 'Leaderboard',
             RecordList: RecordList,
             displayName: req.user ? req.user.displayName : ""
         });
@@ -56,6 +59,16 @@ router.get('/add', async (req, res, next) => {
 // POST route for processing the Add Page --> Create Operation
 router.post('/add', async (req, res, next) => {
     try {
+        // This checks if the username exists in the User collection
+        const existingUser = await User.findOne({ username: req.body.username });
+        if (!existingUser) {
+            return res.render('TypingRecords/add', {
+                title: 'Add Typing Record',
+                displayName: req.user ? req.user.displayName : "",
+                error: 'Error: Username does not exist. Please enter a registered username.'
+            });
+        }
+
         let newRecord = TypingRecord({
             "username": req.body.username,
             "wordsPerMinute": req.body.wordsPerMinute,
@@ -64,16 +77,14 @@ router.post('/add', async (req, res, next) => {
             "textPrompt": req.body.textPrompt,
             "dateCompleted": new Date()
         });
-        TypingRecord.create(newRecord).then(() => {
-            res.redirect('/typingRecords');
-        });
+        await TypingRecord.create(newRecord);
+        res.redirect('/typingRecords');
     }
     catch (err) {
         console.log(err);
-        res.render('TypingRecords/list', {
+        res.render('TypingRecords/add', {
             error: 'Error on the Server',
             title: 'Error',
-            RecordList: [],
             displayName: req.user ? req.user.displayName : ""
         });
     }
