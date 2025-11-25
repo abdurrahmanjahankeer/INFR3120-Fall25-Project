@@ -63,7 +63,7 @@ router.post('/login', function(req,res,next){
     }
     if(!user)
     {
-      req.flash('loginMessage','AuthenticationError');
+      req.flash('loginMessage','Authentication Error: Invalid username or password');
       return res.redirect('/login');
     }
     req.login(user,(err)=>{
