@@ -110,6 +110,19 @@ router.get('/edit/:id', async (req, res, next) => {
 // POST route for processing the Edit Page --> Update Operation
 router.post('/edit/:id', async (req, res, next) => {
     try {
+        // Validate that the username exists in User collection
+        const existingUser = await User.findOne({ username: req.body.username });
+        if (!existingUser) {
+            // If not found, re-render edit page with error
+            const recordToEdit = await TypingRecord.findById(req.params.id);
+            return res.render("TypingRecords/edit", {
+                title: 'Edit Typing Record',
+                Record: recordToEdit,
+                displayName: req.user ? req.user.displayName : "",
+                error: 'Error: Username does not exist. Please enter a registered username.'
+            });
+        }
+
         let id = req.params.id;
         let updateRecord = TypingRecord({
             "_id": id,
@@ -120,9 +133,9 @@ router.post('/edit/:id', async (req, res, next) => {
             "textPrompt": req.body.textPrompt,
             "dateCompleted": req.body.dateCompleted
         });
-        TypingRecord.findByIdAndUpdate(id, updateRecord).then(() => {
-            res.redirect("/typingRecords");
-        });
+
+        await TypingRecord.findByIdAndUpdate(id, updateRecord);
+        res.redirect("/typingRecords");
     }
     catch (err) {
         console.log(err);

@@ -15,21 +15,21 @@
             <% if(typeof displayName=='string' && displayName) { %>
                 <!--Header Row-->
                 <tr class="d-flex">
-                    <th class="text-center col-2">Username</th>
+                    <th class="text-center col-1">Username</th>
                     <th class="text-center col-1">WPM</th>
                     <th class="text-center col-1">Accuracy</th>
                     <th class="text-center col-1">Time (s)</th>
-                    <th class="col-5">Text Prompt</th>
+                    <th class="col-6">Text Prompt</th>
                     <th class="text-center" style="width: 108px;">Edit</th>
                     <th class="text-center" style="width: 108px;">Delete</th>
                 </tr>
                 <% for(let count=0; count < RecordList.length; count++) { %>
                     <tr class="d-flex">
-                        <td class="text-center col-2"><%= RecordList[count].username %></td>
+                        <td class="text-center col-1"><%= RecordList[count].username %></td>
                         <td class="text-center col-1"><%= RecordList[count].wordsPerMinute %></td>
                         <td class="text-center col-1"><%= RecordList[count].accuracy %></td>
                         <td class="text-center col-1"><%= RecordList[count].timeTaken %></td>
-                        <td class="col-5"><%= RecordList[count].textPrompt %></td>
+                        <td class="col-6"><%= RecordList[count].textPrompt %></td>
                         <td class="text-center col-1">
                         <a href="/typingRecords/edit/<%= RecordList[count]._id%>" 
                             class="btn btn-primary btn-sm crud-btn">
@@ -44,19 +44,19 @@
             <% } else { %>
                 <!--Header Row-->
                 <tr class="d-flex">
-                    <th class="text-center col-3">Username</th>
-                    <th class="text-center col-2">WPM</th>
-                    <th class="text-center col-2">Accuracy</th>
+                    <th class="text-center col-2">Username</th>
+                    <th class="text-center col-1">WPM</th>
+                    <th class="text-center col-1">Accuracy</th>
                     <th class="text-center col-2">Time (s)</th>
-                    <th class="col-3">Text Prompt</th>
+                    <th class="col-6">Text Prompt</th>
                 </tr>
                 <% for(let count=0; count < RecordList.length; count++) { %>
                     <tr class="d-flex">
-                        <td class="text-center col-3"><%= RecordList[count].username %></td>
-                        <td class="text-center col-2"><%= RecordList[count].wordsPerMinute %></td>
-                        <td class="text-center col-2"><%= RecordList[count].accuracy %></td>
+                        <td class="text-center col-2"><%= RecordList[count].username %></td>
+                        <td class="text-center col-1"><%= RecordList[count].wordsPerMinute %></td>
+                        <td class="text-center col-1"><%= RecordList[count].accuracy %></td>
                         <td class="text-center col-2"><%= RecordList[count].timeTaken %></td>
-                        <td class="col-3"><%= RecordList[count].textPrompt %></td>                        
+                        <td class="col-6"><%= RecordList[count].textPrompt %></td>                        
                     </tr>
                 <% } %>
             <% } %>

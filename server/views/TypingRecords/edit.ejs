@@ -4,6 +4,11 @@
     <div class="row">
         <div class="offset-md-3 col-md-6">
             <h1><%= title %></h1>
+
+            <% if (typeof error !== 'undefined' && error.length > 0) { %>
+                <div class="alert alert-danger"><%= error %></div>
+            <% } %>
+
             <form class="form" method="post">
                 <div class="form-group">
                     <label for="usernameTextField">Username</label>
