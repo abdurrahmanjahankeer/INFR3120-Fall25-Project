@@ -1,9 +1,41 @@
 <%- include('partials/header') %>
 <%- include('partials/main_nav') %>
 
-<div class="container mt-5">
+<main class="container mt-5">
   <h2 class="text-center">Speed Type Writer Game</h2>
-  <p class="text-center">Game content coming soon!</p>
-</div>
+
+  <div id="gameIntro" class="text-center mt-3">
+    <p>Press "Start Test" to begin the typing challenge.</p>
+  </div>
+
+  <div id="gameControls" class="text-center mt-4">
+    <button id="startTestButton" class="btn btn-primary">Start Test</button>
+    <button id="resetTestButton" class="btn btn-secondary" disabled>Reset</button>
+  </div>
+
+  <div id="gameStats" class="row mt-4" style="display:none;">
+    <div class="col-md-4 text-center">
+      <strong>Time Left:</strong> <span id="timeLeftDisplay">60</span> s
+    </div>
+    <div class="col-md-4 text-center">
+      <strong>Words Per Minute:</strong> <span id="wpmDisplay">0</span>
+    </div>
+    <div class="col-md-4 text-center">
+      <strong>Accuracy:</strong> <span id="accuracyDisplay">0</span> %
+    </div>
+  </div>
+
+  <div id="gamePromptWrapper" class="mt-4" style="display:none;">
+    <label for="promptDisplay"><strong>Text To Type:</strong></label>
+    <div id="promptDisplay" class="border rounded p-3" style="min-height:80px;"></div>
+  </div>
+
+  <div id="gameInputWrapper" class="mt-4" style="display:none;">
+    <label for="playerInput"><strong>Your Typing:</strong></label>
+    <textarea id="playerInput" class="form-control" rows="4" placeholder="Start typing here when the test begins..." disabled></textarea>
+  </div>
+
+  <div id="gameResultMessage" class="mt-4 text-center" style="display:none;"></div>
+</main>
 
 <%- include('partials/footer') %>

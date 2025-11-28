@@ -6,6 +6,3 @@
     }
     window.addEventListener("load",start);
 })();
-
-
-
