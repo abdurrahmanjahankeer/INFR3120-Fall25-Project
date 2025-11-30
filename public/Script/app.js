@@ -31,34 +31,9 @@
   var currentWordHasError = false;
   var lastWordIndex = -1;
 
-  // sentence prompts
-  var easyPrompts = [
-    "Type these simple practice words to warm up your hands for the main challenge.",
-    "Short and easy sentences help you get comfortable with the keyboard layout.",
-    "Practice makes perfect so use these simple lines to build your typing speed."
-  ];
-
-  var mediumPrompts = [
-    "Our typing game records your speed and accuracy while you race against the countdown timer.",
-    "Stay relaxed while you type each word carefully and try not to rush or panic under pressure.",
-    "Focus on each letter in the sentence and keep your eyes on the text you are copying from the screen."
-  ];
-
-  var hardPrompts = [
-    "Typing accurately for longer sentences helps you prepare for reports assignments and professional messages.",
-    "Consistent daily practice with this speed type writer game can improve both your accuracy and confidence.",
-    "Keep a steady rhythm with your fingers and remember that accuracy matters more than a very high words per minute score."
-  ];
-
   function chooseRandomPrompt() {
-    var promptSetChoice = Math.random();
-    if (promptSetChoice < 0.33) {
-      currentPromptText = easyPrompts[Math.floor(Math.random() * easyPrompts.length)];
-    } else if (promptSetChoice < 0.66) {
-      currentPromptText = mediumPrompts[Math.floor(Math.random() * mediumPrompts.length)];
-    } else {
-      currentPromptText = hardPrompts[Math.floor(Math.random() * hardPrompts.length)];
-    }
+    var index = Math.floor(Math.random() * prompts.length);
+    currentPromptText = prompts[index];
     currentPromptLength = currentPromptText.length;
   }
 
