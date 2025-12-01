@@ -187,32 +187,40 @@
 
     gameResultMessage.innerHTML = resultHtml;
 
-    // Auto-submit to leaderboard
-    var usernameField = document.getElementById("usernameTextField");
-    var wpmField = document.getElementById("wpmTextField");
-    var accuracyField = document.getElementById("accuracyTextField");
-    var timeField = document.getElementById("timeTextField");
-    var textPromptField = document.getElementById("textPromptTextArea");
+    // Auto-submit to leaderboard if logged in
+    if (window.displayName && window.displayName.trim() !== "") {
+      // User is logged in, auto-submit via AJAX
+      var submitData = {
+        wordsPerMinute: stats.wordsPerMinute,
+        accuracy: stats.accuracy,
+        timeTaken: secondsUsed,
+        textPrompt: currentPromptText
+      };
 
-    if (
-      usernameField &&
-      wpmField &&
-      accuracyField &&
-      timeField &&
-      textPromptField
-    ) {
-      timeField.value = secondsUsed;
-      wpmField.value = stats.wordsPerMinute;
-      accuracyField.value = stats.accuracy;
-      textPromptField.value = currentPromptText;
-
-      // Auto-submit the form if username is filled
-      if (usernameField.value && usernameField.value.trim() !== "") {
-        var form = document.getElementById("addTypingRecordForm");
-        if (form) {
-          form.submit();
+      fetch("/typingRecords/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify(submitData)
+      })
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(data) {
+        if (data.success) {
+          gameResultMessage.innerHTML = resultHtml + "<br><strong style='color: green;'>✓ Record added to leaderboard!</strong>";
+        } else {
+          console.error("Failed to submit record:", data.error);
         }
-      }
+      })
+      .catch(function(error) {
+        console.error("Error submitting record:", error);
+      });
+    } else {
+      // User not logged in, show message
+      gameResultMessage.innerHTML = resultHtml + "<br><strong style='color: orange;'>Please log in to save your record to the leaderboard!</strong>";
     }
   }
 

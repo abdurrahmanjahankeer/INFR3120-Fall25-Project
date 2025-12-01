@@ -25,7 +25,8 @@ router.get('/', async (req, res, next) => {
         res.render('TypingRecords/list', {
             title: 'Top 10 Leaderboard',
             RecordList: RecordList,
-            displayName: req.user ? req.user.displayName : ""
+            displayName: req.user ? req.user.username : "",
+            isLoggedIn: req.isAuthenticated()
         });
     }
     catch (err) {
@@ -34,7 +35,7 @@ router.get('/', async (req, res, next) => {
             error: 'Error on the Server',
             title: 'Error',
             RecordList: [],
-            displayName: req.user ? req.user.displayName : ""
+            displayName: req.user ? req.user.username : ""
         });
     }
 });
@@ -59,25 +60,11 @@ router.get('/add', async (req, res, next) => {
 });
 
 // POST route for processing the Add Page --> Create Operation
-router.post('/add', async (req, res, next) => {
+router.post('/add', requireAuth, async (req, res, next) => {
     try {
-        // Get the username - either from form or from logged-in user
-        let usernameToUse = req.body.username;
-
-        // If user is logged in, use their username instead
-        if (req.user && req.user.username) {
-            usernameToUse = req.user.username;
-        }
-
-        // This checks if the username exists in the User collection
-        const existingUser = await User.findOne({ username: usernameToUse });
-        if (!existingUser) {
-            return res.render('TypingRecords/add', {
-                title: 'Add Typing Record',
-                displayName: req.user ? req.user.displayName : "",
-                error: 'Error: Username does not exist. Please enter a registered username.'
-            });
-        }
+        // User must be logged in to add a record
+        // Use the actual username from the User model, not displayName
+        let usernameToUse = req.user.username;
 
         let newRecord = TypingRecord({
             "username": usernameToUse,
@@ -88,15 +75,26 @@ router.post('/add', async (req, res, next) => {
             "dateCompleted": new Date()
         });
         await TypingRecord.create(newRecord);
-        res.redirect('/typingRecords');
+        
+        // If AJAX request, send JSON response
+        if (req.xhr || req.headers.accept.indexOf('application/json') > -1) {
+            res.json({ success: true, message: 'Record added successfully' });
+        } else {
+            res.redirect('/typingRecords');
+        }
     }
     catch (err) {
         console.log(err);
-        res.render('TypingRecords/add', {
-            error: 'Error on the Server',
-            title: 'Error',
-            displayName: req.user ? req.user.displayName : ""
-        });
+        // If AJAX request, send JSON error
+        if (req.xhr || req.headers.accept.indexOf('application/json') > -1) {
+            res.status(500).json({ success: false, error: 'Error on the Server' });
+        } else {
+            res.render('TypingRecords/add', {
+                error: 'Error on the Server',
+                title: 'Error',
+                displayName: req.user ? req.user.displayName : ""
+            });
+        }
     }
 });
 
@@ -107,7 +105,7 @@ router.get('/edit/:id', requireAuth, async (req, res, next) => {
         const recordToEdit = await TypingRecord.findById(id);
 
         // Check if the record belongs to the logged-in user
-        if (recordToEdit.username !== req.user.username) {
+        if (!recordToEdit || recordToEdit.username !== req.user.username) {
             return res.redirect('/typingRecords');
         }
 
@@ -130,26 +128,13 @@ router.post('/edit/:id', requireAuth, async (req, res, next) => {
         const existingRecord = await TypingRecord.findById(id);
 
         // Check if the record belongs to the logged-in user
-        if (existingRecord.username !== req.user.username) {
+        if (!existingRecord || existingRecord.username !== req.user.username) {
             return res.redirect('/typingRecords');
-        }
-
-        // Validate that the username exists in User collection
-        const existingUser = await User.findOne({ username: req.body.username });
-        if (!existingUser) {
-            // If not found, re-render edit page with error
-            const recordToEdit = await TypingRecord.findById(req.params.id);
-            return res.render("TypingRecords/edit", {
-                title: 'Edit Typing Record',
-                Record: recordToEdit,
-                displayName: req.user ? req.user.displayName : "",
-                error: 'Error: Username does not exist. Please enter a registered username.'
-            });
         }
 
         let updateRecord = TypingRecord({
             "_id": id,
-            "username": req.body.username,
+            "username": req.user.username,
             "wordsPerMinute": req.body.wordsPerMinute,
             "accuracy": req.body.accuracy,
             "timeTaken": req.body.timeTaken,

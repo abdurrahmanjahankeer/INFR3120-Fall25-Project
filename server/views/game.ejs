@@ -61,3 +61,7 @@
     </main>
 
     <%- include('partials/footer') %>
+    <script>
+      // Pass displayName to frontend for auto-submit
+      window.displayName = "<%= displayName %>";
+    </script>
