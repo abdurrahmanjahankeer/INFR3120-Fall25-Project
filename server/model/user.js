@@ -25,6 +25,16 @@ let User = mongoose.Schema({
         trim:true,
         required:'displayName is required'
     },
+    googleId:
+    {
+        type: String,
+        default: ""
+    },
+    githubId:
+    {
+        type: String,
+        default: ""
+    },
     created:
     {
         type:Date,

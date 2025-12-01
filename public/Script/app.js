@@ -26,10 +26,8 @@
   var elapsedSeconds = 0;
   var gameFinishedByLength = false;
   var totalKeyPresses = 0;
-  var mistakeWords = [];
-  var lastTypedValue = "";
-  var currentWordHasError = false;
-  var lastWordIndex = -1;
+  var correctCharsTyped = 0;
+  var incorrectCharsTyped = 0;
 
   function chooseRandomPrompt() {
     var index = Math.floor(Math.random() * prompts.length);
@@ -45,10 +43,8 @@
     elapsedSeconds = 0;
     gameFinishedByLength = false;
     totalKeyPresses = 0;
-    mistakeWords = [];
-    lastTypedValue = "";
-    currentWordHasError = false;
-    lastWordIndex = -1;
+    correctCharsTyped = 0;
+    incorrectCharsTyped = 0;
     clearInterval(gameTimer);
     gameTimer = null;
 
@@ -73,7 +69,7 @@
     resetGameState();
 
     chooseRandomPrompt();
-    promptDisplay.textContent = currentPromptText;
+    renderPromptWithHighlight();
 
     gameActive = true;
     timeRemaining = totalTimeSeconds;
@@ -86,9 +82,8 @@
     gameResultMessage.style.display = "none";
 
     playerInput.disabled = false;
-    lastTypedValue = "";
-    currentWordHasError = false;
-    lastWordIndex = -1;
+    correctCharsTyped = 0;
+    incorrectCharsTyped = 0;
     playerInput.focus();
 
     startButton.disabled = true;
@@ -102,10 +97,51 @@
       }
       timeLeftDisplay.textContent = timeRemaining;
 
+      // Update live stats
+      updateLiveStats();
+
       if (timeRemaining <= 0 && !gameFinishedByLength) {
         endGame();
       }
     }, 1000);
+  }
+
+  function renderPromptWithHighlight() {
+    var typedText = playerInput.value;
+    var html = "";
+
+    for (var i = 0; i < currentPromptText.length; i++) {
+      var char = currentPromptText.charAt(i);
+      var typedChar = i < typedText.length ? typedText.charAt(i) : null;
+
+      if (typedChar === null) {
+        // Not typed yet
+        if (i === typedText.length) {
+          // Current cursor position
+          html += '<span style="background-color: #ffffcc; border-left: 2px solid #000;">' + (char === ' ' ? '&nbsp;' : char) + '</span>';
+        } else {
+          html += '<span style="color: #999;">' + (char === ' ' ? '&nbsp;' : char) + '</span>';
+        }
+      } else if (typedChar === char) {
+        // Correct
+        html += '<span style="color: #28a745; font-weight: bold;">' + (char === ' ' ? '&nbsp;' : char) + '</span>';
+      } else {
+        // Incorrect
+        html += '<span style="background-color: #dc3545; color: white; font-weight: bold;">' + (char === ' ' ? '&nbsp;' : char) + '</span>';
+      }
+    }
+
+    promptDisplay.innerHTML = html;
+  }
+
+  function updateLiveStats() {
+    if (!gameActive) return;
+
+    var typedText = playerInput.value;
+    var stats = calculateStats(typedText, currentPromptText, elapsedSeconds);
+
+    wpmDisplay.textContent = stats.wordsPerMinute;
+    accuracyDisplay.textContent = stats.accuracy;
   }
 
   function endGame() {
@@ -122,42 +158,36 @@
     var typedText = playerInput.value;
     var secondsUsed = elapsedSeconds;
     if (secondsUsed <= 0) {
-        secondsUsed = 1;
+      secondsUsed = 1;
     }
     var stats = calculateStats(typedText, currentPromptText, secondsUsed);
 
-    var mistakes = mistakeWords.length;
-
-    var totalWords = stats.wordsTyped;
-    var adjustedAccuracy = 0;
-    if (totalWords > 0) {
-      adjustedAccuracy = Math.round(((totalWords - mistakes) / totalWords) * 100);
-    }
-    stats.accuracy = adjustedAccuracy;
     wpmDisplay.textContent = stats.wordsPerMinute;
     accuracyDisplay.textContent = stats.accuracy;
 
     gameResultMessage.style.display = "block";
 
     var resultHtml =
-    "<strong>Test Finished!</strong> You typed " +
-    stats.wordsTyped +
-    " words with " +
-    stats.correctCharacters +
-    " correct characters in " +
-    secondsUsed +
-    " seconds and made " +
-    mistakes +
-    " mistakes.";
+      "<strong>Test Finished!</strong> You typed " +
+      stats.correctCharacters +
+      "/" +
+      stats.charactersTyped +
+      " correct characters in " +
+      secondsUsed +
+      " seconds. WPM: " +
+      stats.wordsPerMinute +
+      ", Accuracy: " +
+      stats.accuracy + "%.";
 
-    if (mistakeWords.length > 0) {
+    if (stats.mistakeWords.length > 0) {
       resultHtml = resultHtml +
         "<br><strong>Words with mistakes:</strong> " +
-        mistakeWords.join(", ");
+        stats.mistakeWords.join(", ");
     }
 
-gameResultMessage.innerHTML = resultHtml;
+    gameResultMessage.innerHTML = resultHtml;
 
+    // Auto-submit to leaderboard
     var usernameField = document.getElementById("usernameTextField");
     var wpmField = document.getElementById("wpmTextField");
     var accuracyField = document.getElementById("accuracyTextField");
@@ -175,46 +205,81 @@ gameResultMessage.innerHTML = resultHtml;
       wpmField.value = stats.wordsPerMinute;
       accuracyField.value = stats.accuracy;
       textPromptField.value = currentPromptText;
+
+      // Auto-submit the form if username is filled
+      if (usernameField.value && usernameField.value.trim() !== "") {
+        var form = document.getElementById("addTypingRecordForm");
+        if (form) {
+          form.submit();
+        }
+      }
     }
   }
 
   function calculateStats(typedText, promptText, usedSeconds) {
-    var trimmedTyped = typedText.trim();
-    var trimmedPrompt = promptText.trim();
-
-    var typedWordsArray = trimmedTyped.length > 0 ? trimmedTyped.split(/\s+/) : [];
-    var promptWordsArray = trimmedPrompt.length > 0 ? trimmedPrompt.split(/\s+/) : [];
-
-    var wordsTyped = typedWordsArray.length;
-
-    var charactersTyped = trimmedTyped.length;
     var correctCharacters = 0;
+    var incorrectCharacters = 0;
+    var mistakeWordsSet = {};
 
-    var maxLength = Math.min(trimmedTyped.length, trimmedPrompt.length);
-    var index = 0;
-    while (index < maxLength) {
-      if (trimmedTyped.charAt(index) === trimmedPrompt.charAt(index)) {
-        correctCharacters = correctCharacters + 1;
+    var promptWords = promptText.split(/\s+/);
+    var typedWords = typedText.trim().length > 0 ? typedText.trim().split(/\s+/) : [];
+
+    // Character-by-character comparison
+    var maxLength = Math.max(typedText.length, promptText.length);
+    for (var i = 0; i < maxLength; i++) {
+      var typedChar = i < typedText.length ? typedText.charAt(i) : "";
+      var promptChar = i < promptText.length ? promptText.charAt(i) : "";
+
+      if (typedChar === promptChar && typedChar !== "") {
+        correctCharacters++;
+      } else if (typedChar !== "") {
+        incorrectCharacters++;
       }
-      index = index + 1;
     }
 
+    // Word-level mistake tracking
+    for (var w = 0; w < typedWords.length; w++) {
+      if (w < promptWords.length) {
+        var typedWord = typedWords[w];
+        var promptWord = promptWords[w];
+
+        if (typedWord !== promptWord) {
+          mistakeWordsSet[promptWord] = true;
+        }
+      }
+    }
+
+    var mistakeWords = [];
+    for (var word in mistakeWordsSet) {
+      if (mistakeWordsSet.hasOwnProperty(word)) {
+        mistakeWords.push(word);
+      }
+    }
+
+    var totalCharsTyped = typedText.length;
     var accuracy = 0;
-    if (charactersTyped > 0) {
-      accuracy = Math.round((correctCharacters / charactersTyped) * 100);
+    if (totalCharsTyped > 0) {
+      accuracy = Math.round((correctCharacters / totalCharsTyped) * 100);
+      if (accuracy > 100) accuracy = 100;
+      if (accuracy < 0) accuracy = 0;
     }
 
+    // WPM calculation based on CORRECT characters only
+    // Standard: 1 word = 5 characters
+    var correctWords = correctCharacters / 5;
     var wpm = 0;
     if (usedSeconds > 0) {
-        wpm = Math.round((wordsTyped / usedSeconds) * 60);
+      wpm = Math.round((correctWords / usedSeconds) * 60);
     }
 
     return {
-      wordsTyped: wordsTyped,
-      charactersTyped: charactersTyped,
+      wordsTyped: typedWords.length,
+      charactersTyped: totalCharsTyped,
       correctCharacters: correctCharacters,
+      incorrectCharacters: incorrectCharacters,
       accuracy: accuracy,
-      wordsPerMinute: wpm
+      wordsPerMinute: wpm,
+      mistakeWords: mistakeWords
     };
   }
 
@@ -231,6 +296,37 @@ gameResultMessage.innerHTML = resultHtml;
   }
 
   if (playerInput) {
+    // Prevent copy and paste
+    playerInput.addEventListener("copy", function (event) {
+      event.preventDefault();
+      return false;
+    });
+
+    playerInput.addEventListener("paste", function (event) {
+      event.preventDefault();
+      return false;
+    });
+
+    playerInput.addEventListener("cut", function (event) {
+      event.preventDefault();
+      return false;
+    });
+
+    playerInput.addEventListener("input", function () {
+      if (!gameActive) return;
+
+      var typedNow = playerInput.value;
+
+      // Update the visual highlighting in real-time
+      renderPromptWithHighlight();
+
+      // Auto-finish when prompt is completed correctly
+      if (!gameFinishedByLength && typedNow.length >= currentPromptLength) {
+        gameFinishedByLength = true;
+        endGame();
+      }
+    });
+
     playerInput.addEventListener("keydown", function (event) {
       if (!gameActive) {
         return;
@@ -241,59 +337,6 @@ gameResultMessage.innerHTML = resultHtml;
       }
 
       totalKeyPresses = totalKeyPresses + 1;
-
-      setTimeout(function () {
-        var typedNow = playerInput.value;
-
-        var promptWords = currentPromptText.split(/\s+/);
-        var typedWords = typedNow.trim().length > 0 ? typedNow.trim().split(/\s+/) : [];
-
-        if (typedWords.length > 0) {
-          var wordIndex = typedWords.length - 1;
-          var typedWord = typedWords[wordIndex];
-          var promptWord = wordIndex < promptWords.length ? promptWords[wordIndex] : "";
-
-          if (wordIndex !== lastWordIndex) {
-            if (lastWordIndex >= 0) {
-              var prevPromptWord = promptWords[lastWordIndex];
-              if (currentWordHasError && mistakeWords.indexOf(prevPromptWord) === -1) {
-                mistakeWords.push(prevPromptWord);
-              }
-            }
-            currentWordHasError = false;
-            lastWordIndex = wordIndex;
-          }
-
-          var compareLength = Math.min(typedWord.length, promptWord.length);
-          var i = 0;
-          while (i < compareLength) {
-            if (typedWord.charAt(i) !== promptWord.charAt(i)) {
-              currentWordHasError = true;
-              break;
-            }
-            i = i + 1;
-          }
-        }
-
-        lastTypedValue = typedNow;
-
-        if (!gameFinishedByLength && typedNow.length >= currentPromptLength) {
-          var endPromptWords = currentPromptText.split(/\s+/);
-          var endTypedWords = typedNow.trim().length > 0 ? typedNow.trim().split(/\s+/) : [];
-          if (endTypedWords.length > 0) {
-            var endIndex = endTypedWords.length - 1;
-            if (endIndex < endPromptWords.length) {
-              var endPromptWord = endPromptWords[endIndex];
-              if (currentWordHasError && mistakeWords.indexOf(endPromptWord) === -1) {
-                mistakeWords.push(endPromptWord);
-              }
-            }
-          }
-
-          gameFinishedByLength = true;
-          endGame();
-        }
-      }, 0);
     });
   }
 })();

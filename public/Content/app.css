@@ -164,6 +164,55 @@ form textarea{
     margin-bottom: 15px;
 }
 
+main.container{
+    max-width: 1300px;
+    margin-top: 60px;
+    margin-bottom: 60px;
+}
+main.container .row{
+    text-align: center;
+}
+main.container .row .col-md-4,
+main.container .row .col-md-6{
+    text-align: left;
+}
+main.container .row form{
+    background-color: white;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    padding: 25px 25px 20px 25px;
+    margin-top: 15px;
+}
+main.container h1{
+    font-size: 32px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+main.container .form-group,
+main.container fieldset.form-group{
+    margin-bottom: 15px;
+}
+main.container fieldset.form-group.text-center{
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+main.container a.btn-danger,
+main.container a.btn-dark{
+    min-width: 140px;
+    margin-right: 8px;
+    margin-left: 8px;
+}
+main.container fieldset.form-group.text-right{
+    text-align: center;
+    margin-top: 15px;
+}
+main.container fieldset.form-group.text-right input[type="submit"],
+main.container fieldset.form-group.text-right input[type="button"] {
+    min-width: 140px;
+    margin-right: 8px;
+    margin-left: 8px;
+}
+
 /* buttons */
 .contact-btn{
     padding: 10px 25px;

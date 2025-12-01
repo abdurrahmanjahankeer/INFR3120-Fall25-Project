@@ -123,6 +123,32 @@ router.post('/register', function(req,res,next){
     }
   })
 });
+
+// Google 0Auth Routes
+router.get('/auth/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] })
+);
+
+router.get('/auth/google/callback',
+  passport.authenticate('google', { failureRedirect: '/login', failureFlash: true }),
+  function (req, res) {
+    return res.redirect('/typingRecords');
+  }
+);
+
+// GitHub OAuth Routes
+router.get('/auth/github',
+  passport.authenticate('github', { scope: ['user:email'] })
+);
+
+router.get('/auth/github/callback',
+  passport.authenticate('github', { failureRedirect: '/login', failureFlash: true }),
+  function (req, res) {
+    return res.redirect('/typingRecords');
+  }
+);
+
+// Logout
 router.get('/logout',function(req,res,next){
 req.logout(function(err)
 {

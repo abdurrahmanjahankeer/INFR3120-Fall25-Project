@@ -1,70 +1,139 @@
 <%- include ('../partials/header') %>
-<%- include ('../partials/main_nav') %>
+    <%- include ('../partials/main_nav') %>
 
-<!--Main content-->
-<main class="container">
-    <div class="row">
-        <div class="container" style="max-width: 100%; margin: 0 auto;">
-            <h1><%= title %></h1>
-            <% if(typeof displayName=='string' && displayName) { %>
-                <a href="/typingRecords/add" class="btn btn-primary" role="button">
-                <i class="fas fa-plus-circle"></i> Add a Record
-            </a>
-            <% } %>
-            <table class="table table-bordered table-striped table-hover">
-            <% if(typeof displayName=='string' && displayName) { %>
-                <!--Header Row-->
-                <tr class="d-flex">
-                    <th class="text-center col-1">Username</th>
-                    <th class="text-center col-1">WPM</th>
-                    <th class="text-center col-1">Accuracy</th>
-                    <th class="text-center col-1">Time (s)</th>
-                    <th class="col-6">Text Prompt</th>
-                    <th class="text-center" style="width: 108px;">Edit</th>
-                    <th class="text-center" style="width: 108px;">Delete</th>
-                </tr>
-                <% for(let count=0; count < RecordList.length; count++) { %>
-                    <tr class="d-flex">
-                        <td class="text-center col-1"><%= RecordList[count].username %></td>
-                        <td class="text-center col-1"><%= RecordList[count].wordsPerMinute %></td>
-                        <td class="text-center col-1"><%= RecordList[count].accuracy %></td>
-                        <td class="text-center col-1"><%= RecordList[count].timeTaken %></td>
-                        <td class="col-6"><%= RecordList[count].textPrompt %></td>
-                        <td class="text-center col-1">
-                        <a href="/typingRecords/edit/<%= RecordList[count]._id%>" 
-                            class="btn btn-primary btn-sm crud-btn">
-                            <i class="fas fa-pencil-alt"></i></a></td>
-                        <td class="text-center col-1">
-                            <a href="/typingRecords/delete/<%= RecordList[count]._id%>" 
-                            class="btn btn-danger btn-sm crud-btn"> 
-                            <i class="fas fa-trash-alt"></i></a></td>
-                        
-                    </tr>
-                <% } %>
-            <% } else { %>
-                <!--Header Row-->
-                <tr class="d-flex">
-                    <th class="text-center col-2">Username</th>
-                    <th class="text-center col-1">WPM</th>
-                    <th class="text-center col-1">Accuracy</th>
-                    <th class="text-center col-2">Time (s)</th>
-                    <th class="col-6">Text Prompt</th>
-                </tr>
-                <% for(let count=0; count < RecordList.length; count++) { %>
-                    <tr class="d-flex">
-                        <td class="text-center col-2"><%= RecordList[count].username %></td>
-                        <td class="text-center col-1"><%= RecordList[count].wordsPerMinute %></td>
-                        <td class="text-center col-1"><%= RecordList[count].accuracy %></td>
-                        <td class="text-center col-2"><%= RecordList[count].timeTaken %></td>
-                        <td class="col-6"><%= RecordList[count].textPrompt %></td>                        
-                    </tr>
-                <% } %>
-            <% } %>
-            </table>
-        </div>
-    </div>
-</main>
-<br>
-<br>
-<%- include ('../partials/footer.ejs') %>
- 
+        <!--Main content-->
+        <main class="container">
+            <div class="row">
+                <div class="container" style="max-width: 100%; margin: 0 auto;">
+                    <h1 class="text-center mb-4">🏆 <%= title %>
+                    </h1>
+                    <% if(typeof displayName=='string' && displayName) { %>
+                        <div class="text-center mb-3">
+                            <a href="/game" class="btn btn-success" role="button">
+                                <i class="fas fa-play-circle"></i> Play Game
+                            </a>
+                            <a href="/typingRecords/add" class="btn btn-primary" role="button">
+                                <i class="fas fa-plus-circle"></i> Add a Record
+                            </a>
+                        </div>
+                        <% } else { %>
+                            <div class="text-center mb-3">
+                                <a href="/game" class="btn btn-success" role="button">
+                                    <i class="fas fa-play-circle"></i> Play Game
+                                </a>
+                            </div>
+                            <% } %>
+
+                                <table class="table table-bordered table-striped table-hover">
+                                    <% if(typeof displayName=='string' && displayName) { %>
+                                        <!--Header Row for logged in users-->
+                                        <tr class="d-flex">
+                                            <th class="text-center" style="width: 60px;">Rank</th>
+                                            <th class="text-center col-1">Username</th>
+                                            <th class="text-center col-1">WPM</th>
+                                            <th class="text-center col-1">Accuracy</th>
+                                            <th class="text-center col-1">Time (s)</th>
+                                            <th class="col-5">Text Prompt</th>
+                                            <th class="text-center" style="width: 108px;">Edit</th>
+                                            <th class="text-center" style="width: 108px;">Delete</th>
+                                        </tr>
+                                        <% for(let count=0; count < RecordList.length; count++) { let rankClass='' ; let
+                                            medal='' ; if(count===0) { rankClass='table-warning' ; medal='🥇' ; } else
+                                            if(count===1) { rankClass='table-secondary' ; medal='🥈' ; } else
+                                            if(count===2) { rankClass='table-danger' ; medal='🥉' ; } %>
+                                            <tr class="d-flex <%= rankClass %>">
+                                                <td class="text-center" style="width: 60px;"><strong>
+                                                        <%= medal %> #<%= count + 1 %>
+                                                    </strong></td>
+                                                <td class="text-center col-1">
+                                                    <%= RecordList[count].username %>
+                                                </td>
+                                                <td class="text-center col-1"><strong>
+                                                        <%= RecordList[count].wordsPerMinute %>
+                                                    </strong></td>
+                                                <td class="text-center col-1">
+                                                    <%= RecordList[count].accuracy %>%
+                                                </td>
+                                                <td class="text-center col-1">
+                                                    <%= RecordList[count].timeTaken %>
+                                                </td>
+                                                <td class="col-5">
+                                                    <%= RecordList[count].textPrompt %>
+                                                </td>
+                                                <td class="text-center col-1">
+                                                    <% if(RecordList[count].username===displayName || (typeof req
+                                                        !=='undefined' && req.user &&
+                                                        RecordList[count].username===req.user.username)) { %>
+                                                        <a href="/typingRecords/edit/<%= RecordList[count]._id%>"
+                                                            class="btn btn-primary btn-sm crud-btn">
+                                                            <i class="fas fa-pencil-alt"></i></a>
+                                                        <% } else { %>
+                                                            <button class="btn btn-secondary btn-sm" disabled>
+                                                                <i class="fas fa-lock"></i></button>
+                                                            <% } %>
+                                                </td>
+                                                <td class="text-center col-1">
+                                                    <% if(RecordList[count].username===displayName || (typeof req
+                                                        !=='undefined' && req.user &&
+                                                        RecordList[count].username===req.user.username)) { %>
+                                                        <a href="/typingRecords/delete/<%= RecordList[count]._id%>"
+                                                            class="btn btn-danger btn-sm crud-btn">
+                                                            <i class="fas fa-trash-alt"></i></a>
+                                                        <% } else { %>
+                                                            <button class="btn btn-secondary btn-sm" disabled>
+                                                                <i class="fas fa-lock"></i></button>
+                                                            <% } %>
+                                                </td>
+
+                                            </tr>
+                                            <% } %>
+                                                <% } else { %>
+                                                    <!--Header Row for guests-->
+                                                    <tr class="d-flex">
+                                                        <th class="text-center" style="width: 60px;">Rank</th>
+                                                        <th class="text-center col-2">Username</th>
+                                                        <th class="text-center col-1">WPM</th>
+                                                        <th class="text-center col-1">Accuracy</th>
+                                                        <th class="text-center col-1">Time (s)</th>
+                                                        <th class="col-6">Text Prompt</th>
+                                                    </tr>
+                                                    <% for(let count=0; count < RecordList.length; count++) { let
+                                                        rankClass='' ; let medal='' ; if(count===0) {
+                                                        rankClass='table-warning' ; medal='🥇' ; } else if(count===1) {
+                                                        rankClass='table-secondary' ; medal='🥈' ; } else if(count===2)
+                                                        { rankClass='table-danger' ; medal='🥉' ; } %>
+                                                        <tr class="d-flex <%= rankClass %>">
+                                                            <td class="text-center" style="width: 60px;"><strong>
+                                                                    <%= medal %> #<%= count + 1 %>
+                                                                </strong></td>
+                                                            <td class="text-center col-2">
+                                                                <%= RecordList[count].username %>
+                                                            </td>
+                                                            <td class="text-center col-1"><strong>
+                                                                    <%= RecordList[count].wordsPerMinute %>
+                                                                </strong></td>
+                                                            <td class="text-center col-1">
+                                                                <%= RecordList[count].accuracy %>%
+                                                            </td>
+                                                            <td class="text-center col-1">
+                                                                <%= RecordList[count].timeTaken %>
+                                                            </td>
+                                                            <td class="col-6">
+                                                                <%= RecordList[count].textPrompt %>
+                                                            </td>
+                                                        </tr>
+                                                        <% } %>
+                                                            <% } %>
+                                </table>
+
+                                <% if(RecordList.length===0) { %>
+                                    <div class="alert alert-info text-center">
+                                        <strong>No records yet!</strong> Be the first to set a score!
+                                    </div>
+                                    <% } %>
+                </div>
+            </div>
+        </main>
+        <br>
+        <br>
+        <%- include ('../partials/footer.ejs') %>

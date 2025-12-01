@@ -7,21 +7,23 @@ let mongoose = require('mongoose');
 // Connect to our TypingRecord model
 let TypingRecord = require('../model/TypingRecord');
 
-function requireAuth(req,res,next)
-{
-    if(!req.isAuthenticated())
-    {
+function requireAuth(req, res, next) {
+    if (!req.isAuthenticated()) {
         return res.redirect('/login')
     }
     next();
 }
 
-// GET route for displaying the data from DB --> Read Operation
+// GET route for displaying the TOP 10 leaderboard from DB --> Read Operation
 router.get('/', async (req, res, next) => {
     try {
-        const RecordList = await TypingRecord.find();
+        // Get top 10 records sorted by WPM (descending), then by accuracy (descending)
+        const RecordList = await TypingRecord.find()
+            .sort({ wordsPerMinute: -1, accuracy: -1 })
+            .limit(10);
+
         res.render('TypingRecords/list', {
-            title: 'Leaderboard',
+            title: 'Top 10 Leaderboard',
             RecordList: RecordList,
             displayName: req.user ? req.user.displayName : ""
         });
@@ -59,8 +61,16 @@ router.get('/add', async (req, res, next) => {
 // POST route for processing the Add Page --> Create Operation
 router.post('/add', async (req, res, next) => {
     try {
+        // Get the username - either from form or from logged-in user
+        let usernameToUse = req.body.username;
+
+        // If user is logged in, use their username instead
+        if (req.user && req.user.username) {
+            usernameToUse = req.user.username;
+        }
+
         // This checks if the username exists in the User collection
-        const existingUser = await User.findOne({ username: req.body.username });
+        const existingUser = await User.findOne({ username: usernameToUse });
         if (!existingUser) {
             return res.render('TypingRecords/add', {
                 title: 'Add Typing Record',
@@ -70,7 +80,7 @@ router.post('/add', async (req, res, next) => {
         }
 
         let newRecord = TypingRecord({
-            "username": req.body.username,
+            "username": usernameToUse,
             "wordsPerMinute": req.body.wordsPerMinute,
             "accuracy": req.body.accuracy,
             "timeTaken": req.body.timeTaken,
@@ -91,10 +101,16 @@ router.post('/add', async (req, res, next) => {
 });
 
 // GET route for displaying the Edit Page --> Update Operation
-router.get('/edit/:id', async (req, res, next) => {
+router.get('/edit/:id', requireAuth, async (req, res, next) => {
     try {
         const id = req.params.id;
         const recordToEdit = await TypingRecord.findById(id);
+
+        // Check if the record belongs to the logged-in user
+        if (recordToEdit.username !== req.user.username) {
+            return res.redirect('/typingRecords');
+        }
+
         res.render("TypingRecords/edit", {
             title: 'Edit Typing Record',
             Record: recordToEdit,
@@ -108,8 +124,16 @@ router.get('/edit/:id', async (req, res, next) => {
 });
 
 // POST route for processing the Edit Page --> Update Operation
-router.post('/edit/:id', async (req, res, next) => {
+router.post('/edit/:id', requireAuth, async (req, res, next) => {
     try {
+        let id = req.params.id;
+        const existingRecord = await TypingRecord.findById(id);
+
+        // Check if the record belongs to the logged-in user
+        if (existingRecord.username !== req.user.username) {
+            return res.redirect('/typingRecords');
+        }
+
         // Validate that the username exists in User collection
         const existingUser = await User.findOne({ username: req.body.username });
         if (!existingUser) {
@@ -123,7 +147,6 @@ router.post('/edit/:id', async (req, res, next) => {
             });
         }
 
-        let id = req.params.id;
         let updateRecord = TypingRecord({
             "_id": id,
             "username": req.body.username,
@@ -144,9 +167,16 @@ router.post('/edit/:id', async (req, res, next) => {
 });
 
 // GET route to perform Delete Operation
-router.get('/delete/:id', async (req, res, next) => {
+router.get('/delete/:id', requireAuth, async (req, res, next) => {
     try {
         let id = req.params.id;
+        const recordToDelete = await TypingRecord.findById(id);
+
+        // Check if the record belongs to the logged-in user
+        if (!recordToDelete || recordToDelete.username !== req.user.username) {
+            return res.redirect('/typingRecords');
+        }
+
         TypingRecord.deleteOne({ _id: id }).then(() => {
             res.redirect("/typingRecords");
         });

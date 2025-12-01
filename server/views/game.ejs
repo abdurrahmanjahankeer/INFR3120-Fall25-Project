@@ -1,41 +1,63 @@
 <%- include('partials/header') %>
-<%- include('partials/main_nav') %>
+  <%- include('partials/main_nav') %>
 
-<main class="container mt-5">
-  <h2 class="text-center">Speed Type Writer Game</h2>
+    <main class="container mt-5">
+      <h2 class="text-center">Speed Type Writer Game</h2>
 
-  <div id="gameIntro" class="text-center mt-3">
-    <p>Press "Start Test" to begin the typing challenge.</p>
-  </div>
+      <div id="gameIntro" class="text-center mt-3">
+        <p>Press "Start Test" to begin the typing challenge.</p>
+        <% if(typeof displayName=='string' && displayName) { %>
+          <p class="text-muted">Playing as: <strong>
+              <%= displayName %>
+            </strong></p>
+          <% } else { %>
+            <p class="text-warning">Please <a href="/login">login</a> to save your score to the leaderboard!</p>
+            <% } %>
+      </div>
 
-  <div id="gameControls" class="text-center mt-4">
-    <button id="startTestButton" class="btn btn-primary">Start Test</button>
-    <button id="resetTestButton" class="btn btn-secondary" disabled>Reset</button>
-  </div>
+      <div id="gameControls" class="text-center mt-4">
+        <button id="startTestButton" class="btn btn-primary">Start Test</button>
+        <button id="resetTestButton" class="btn btn-secondary" disabled>Reset</button>
+      </div>
 
-  <div id="gameStats" class="row mt-4" style="display:none;">
-    <div class="col-md-4 text-center">
-      <strong>Time Left:</strong> <span id="timeLeftDisplay">60</span> s
-    </div>
-    <div class="col-md-4 text-center">
-      <strong>Words Per Minute:</strong> <span id="wpmDisplay">0</span>
-    </div>
-    <div class="col-md-4 text-center">
-      <strong>Accuracy:</strong> <span id="accuracyDisplay">0</span> %
-    </div>
-  </div>
+      <div id="gameStats" class="row mt-4" style="display:none;">
+        <div class="col-md-4 text-center">
+          <strong>Time Left:</strong> <span id="timeLeftDisplay">60</span> s
+        </div>
+        <div class="col-md-4 text-center">
+          <strong>Words Per Minute:</strong> <span id="wpmDisplay">0</span>
+        </div>
+        <div class="col-md-4 text-center">
+          <strong>Accuracy:</strong> <span id="accuracyDisplay">0</span> %
+        </div>
+      </div>
 
-  <div id="gamePromptWrapper" class="mt-4" style="display:none;">
-    <label for="promptDisplay"><strong>Text To Type:</strong></label>
-    <div id="promptDisplay" class="border rounded p-3" style="min-height:80px;"></div>
-  </div>
+      <div id="gamePromptWrapper" class="mt-4" style="display:none;">
+        <label for="promptDisplay"><strong>Text To Type:</strong></label>
+        <div id="promptDisplay" class="border rounded p-3"
+          style="min-height:80px; font-family: 'Courier New', monospace; font-size: 18px; line-height: 1.6; user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;">
+        </div>
+      </div>
 
-  <div id="gameInputWrapper" class="mt-4" style="display:none;">
-    <label for="playerInput"><strong>Your Typing:</strong></label>
-    <textarea id="playerInput" class="form-control" rows="4" placeholder="Start typing here when the test begins..." disabled></textarea>
-  </div>
+      <div id="gameInputWrapper" class="mt-4" style="display:none;">
+        <label for="playerInput"><strong>Your Typing:</strong></label>
+        <textarea id="playerInput" class="form-control" rows="4" placeholder="Start typing here when the test begins..."
+          disabled style="font-family: 'Courier New', monospace; font-size: 18px; line-height: 1.6;"></textarea>
+      </div>
 
-  <div id="gameResultMessage" class="mt-4 text-center" style="display:none;"></div>
-</main>
+      <div id="gameResultMessage" class="mt-4 text-center alert alert-success" style="display:none;"></div>
 
-<%- include('partials/footer') %>
+      <!-- Hidden form for auto-submitting to leaderboard -->
+      <% if(typeof displayName=='string' && displayName) { %>
+        <form id="addTypingRecordForm" action="/typingRecords/add" method="post" style="display:none;">
+          <input type="text" id="usernameTextField" name="username"
+            value="<%= typeof req !== 'undefined' && req.user && req.user.username ? req.user.username : displayName %>">
+          <input type="number" id="wpmTextField" name="wordsPerMinute">
+          <input type="number" id="accuracyTextField" name="accuracy">
+          <input type="number" id="timeTextField" name="timeTaken">
+          <textarea id="textPromptTextArea" name="textPrompt"></textarea>
+        </form>
+        <% } %>
+    </main>
+
+    <%- include('partials/footer') %>
