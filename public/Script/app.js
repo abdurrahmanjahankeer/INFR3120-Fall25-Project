@@ -15,6 +15,7 @@
   var gamePromptWrapper = document.getElementById("gamePromptWrapper");
   var gameInputWrapper = document.getElementById("gameInputWrapper");
   var gameResultMessage = document.getElementById("gameResultMessage");
+  var gameMistakeBox = document.getElementById("gameMistakeBox");
 
   // game state
   var gameActive = false;
@@ -28,6 +29,9 @@
   var totalKeyPresses = 0;
   var correctCharsTyped = 0;
   var incorrectCharsTyped = 0;
+  var mistakeWordsDuringGame = [];
+  var currentWordHasMistake = false;
+  var currentWordIndex = 0;
 
   function chooseRandomPrompt() {
     var index = Math.floor(Math.random() * prompts.length);
@@ -45,6 +49,9 @@
     totalKeyPresses = 0;
     correctCharsTyped = 0;
     incorrectCharsTyped = 0;
+    mistakeWordsDuringGame = [];
+    currentWordHasMistake = false;
+    currentWordIndex = 0;
     clearInterval(gameTimer);
     gameTimer = null;
 
@@ -54,6 +61,10 @@
     promptDisplay.textContent = "";
     playerInput.value = "";
     gameResultMessage.textContent = "";
+    if (gameMistakeBox) {
+      gameMistakeBox.style.display = "none";
+      gameMistakeBox.textContent = "";
+    }
 
     gameStats.style.display = "none";
     gamePromptWrapper.style.display = "none";
@@ -118,16 +129,16 @@
         // Not typed yet
         if (i === typedText.length) {
           // Current cursor position
-          html += '<span style="background-color: #ffffcc; border-left: 2px solid #000;">' + (char === ' ' ? '&nbsp;' : char) + '</span>';
+          html += '<span style="background-color: #ffffcc; border-left: 2px solid #000;">' + (char === ' ' ? ' ' : char) + '</span>';
         } else {
-          html += '<span style="color: #999;">' + (char === ' ' ? '&nbsp;' : char) + '</span>';
+          html += '<span style="color: #999;">' + (char === ' ' ? ' ' : char) + '</span>';
         }
       } else if (typedChar === char) {
         // Correct
-        html += '<span style="color: #28a745; font-weight: bold;">' + (char === ' ' ? '&nbsp;' : char) + '</span>';
+        html += '<span style="color: #28a745; font-weight: bold;">' + (char === ' ' ? ' ' : char) + '</span>';
       } else {
         // Incorrect
-        html += '<span style="background-color: #dc3545; color: white; font-weight: bold;">' + (char === ' ' ? '&nbsp;' : char) + '</span>';
+        html += '<span style="background-color: #dc3545; color: white; font-weight: bold;">' + (char === ' ' ? ' ' : char) + '</span>';
       }
     }
 
@@ -179,13 +190,28 @@
       ", Accuracy: " +
       stats.accuracy + "%.";
 
-    if (stats.mistakeWords.length > 0) {
-      resultHtml = resultHtml +
-        "<br><strong>Words with mistakes:</strong> " +
-        stats.mistakeWords.join(", ");
-    }
-
+    gameResultMessage.style.display = "block";
     gameResultMessage.innerHTML = resultHtml;
+
+    // RED BOX: words with mistakes
+    if (gameMistakeBox) {
+      var uniqueWords = [];
+      for (var i = 0; i < mistakeWordsDuringGame.length; i++) {
+        if (uniqueWords.indexOf(mistakeWordsDuringGame[i]) === -1) {
+          uniqueWords.push(mistakeWordsDuringGame[i]);
+        }
+      }
+
+      if (uniqueWords.length > 0) {
+        gameMistakeBox.style.display = "block";
+        gameMistakeBox.innerHTML =
+          "<strong>Words with mistakes:</strong> " +
+          uniqueWords.join(", ");
+      } else {
+        gameMistakeBox.style.display = "none";
+        gameMistakeBox.innerHTML = "";
+      }
+    }
 
     // Auto-submit to leaderboard if logged in
     if (window.displayName && window.displayName.trim() !== "") {
@@ -328,8 +354,38 @@
       // Update the visual highlighting in real-time
       renderPromptWithHighlight();
 
-      // Auto-finish when prompt is completed correctly
+      var promptWords = currentPromptText.split(/\s+/);
+      var typedWords = typedNow.trim().length > 0 ? typedNow.trim().split(/\s+/) : [];
+
+      // Find which word the user is currently typing (by spaces)
+      var wordIndex = typedWords.length - 1;
+      var tWord = typedWords[wordIndex] || "";
+      var pWord = promptWords[wordIndex] || "";
+
+      if (wordIndex !== currentWordIndex) {
+        if (currentWordHasMistake && promptWords[currentWordIndex] && mistakeWordsDuringGame.indexOf(promptWords[currentWordIndex]) === -1) {
+          mistakeWordsDuringGame.push(promptWords[currentWordIndex]);
+        }
+        currentWordHasMistake = false;
+        currentWordIndex = wordIndex;
+      }
+
+      // Check for mistakes in the currently typed word (compare char by char)
+      var current = Math.min(tWord.length, pWord.length);
+      for (var i = 0; i < current; i++) {
+        if (tWord.charAt(i) !== pWord.charAt(i)) {
+          currentWordHasMistake = true;
+          break;
+        }
+      }
+      if (tWord.length > pWord.length) currentWordHasMistake = true;
+
+      // Auto-finish when prompt is completed
       if (!gameFinishedByLength && typedNow.length >= currentPromptLength) {
+        // On finish: finalize the last word if it had a mistake
+        if (currentWordHasMistake && promptWords[currentWordIndex] && mistakeWordsDuringGame.indexOf(promptWords[currentWordIndex]) === -1) {
+          mistakeWordsDuringGame.push(promptWords[currentWordIndex]);
+        }
         gameFinishedByLength = true;
         endGame();
       }
