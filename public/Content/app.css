@@ -2,62 +2,62 @@ body{
     font-family: Arial, sans-serif;
     background-color: white;
     margin: 0px;
-    padding: 0px
+    padding: 0px;
 }
+
 .navbar{
     background-color: rgb(0, 70, 167);
-    padding: 15px;
-    height: 70px;
 }
+
+/* keep only the common logo styling; sizes handled per breakpoint */
 .navbar-brand img{
-    height: 70px;
-    width: 70px;
     border-radius: 50%;
     margin-right: 10px;
-    margin-top: -15px;
 }
+
 .homepage-title{
     color: black;
     text-align: center;
-    margin-top: 30px;
-    margin-bottom: 30px;
 }
+
 .homepage-title h1{
-    font-size: 60px;
     font-weight: bold;
 }
+
 .bottom-links{
     text-align: center;
-    margin-top: 5px;
     padding-bottom: 100px;
 }
+
 .bottom-links a{
     color: white;
     text-decoration: none;
     display: block;
     line-height: 75px;
 }
+
 .navbar .dropdown-menu{
   background-color: white;
   color: black;
   z-index: 2000;
   border-radius: 6px;
 }
+
 .navbar .dropdown-menu .dropdown-item{
   color: black;
 }
+
 .box{
-    width: 200px;
-    height: 70px;
-    margin: 15.5px auto;
     text-align: center;
     background-color: black;
     border-radius: 75px;
 }
+
 .box:hover{
     background-color: rgb(87, 233, 8);
 }
-.crud-btn {
+
+.crud-btn{
     width: 50px;
     height: 40px;
     padding-top: 8px;
@@ -65,11 +65,13 @@ body{
     font-size: 16px;
     text-align: center;
 }
+
 .btn-delete{
     width: 40px;
     padding-left: 0;
     padding-right: 0;
 }
+
 .about-main{
     width: 98%;
     max-width: 1100px;
@@ -78,59 +80,66 @@ body{
     padding: 15px 2%;
     border-radius: 12px;
 }
+
 .about-row{
     width: 100%;
     margin-top: 40px;
     margin-bottom: 40px;
     min-height: 200px;
 }
+
 .about-img{
-    width: 180px;
-    height: 180px;
     border: 3px solid black;
     margin-bottom: 0;
     margin-top: 0;
     padding: 0;
     border-radius: 50%;
 }
+
 .member-desc{
     font-size: 22px;
     font-weight: bold;
     color: black;
     margin-top: 42px;
 }
+
 .member-text{
     font-size: 16px;
     margin-top: 10px;
     margin-bottom: 0;
 }
+
 .left-item{
     padding-left: 2%;
     text-align: left;
     vertical-align: top;
 }
+
 .right-item{
     padding-right: 2%;
     text-align: right;
     vertical-align: top;
 }
+
 .center-title{
     text-align: center;
-    margin-bottom: 36px;
-    font-size: 50px;
     font-weight: bold;
 }
+
 .nav-link{
     color: white;
 }
+
 .nav-link:hover{
     background-color: rgb(50, 50, 50);
     border-radius: 5px;
 }
+
 .nav-link.active{
     background-color: rgb(100, 65, 0);
     border-radius: 5px;
 }
+
 footer{
     margin-top: 50px;
     padding: 30px 0px;
@@ -138,18 +147,22 @@ footer{
     color: white;
     text-align: center;
 }
+
 footer a{
     text-decoration: none;
     color: white;
 }
+
 .emails{
     color: white;
 }
+
 .emails:hover{
     color: greenyellow;
 }
+
 /* simpler contact form centering */
-form {
+form{
     max-width: 1600px;
     margin: 0 auto;
     padding: 20px;
@@ -179,16 +192,17 @@ form textarea{
 
 main.container{
     max-width: 1300px;
-    margin-top: 60px;
-    margin-bottom: 60px;
 }
+
 main.container .row{
     text-align: center;
 }
+
 main.container .row .col-md-4,
 main.container .row .col-md-6{
     text-align: left;
 }
+
 main.container .row form{
     background-color: white;
     border: 1px solid #cccccc;
@@ -196,31 +210,38 @@ main.container .row form{
     padding: 25px 25px 20px 25px;
     margin-top: 15px;
 }
+
 main.container h1{
     font-size: 32px;
     margin-bottom: 10px;
     text-align: center;
 }
+
 main.container .form-group,
 main.container fieldset.form-group{
     margin-bottom: 15px;
 }
+
 main.container fieldset.form-group.text-center{
     margin-top: 10px;
     margin-bottom: 5px;
 }
+
 main.container .row form a.btn-danger,
 main.container .row form a.btn-dark{
     min-width: 140px;
     margin-right: 8px;
     margin-left: 8px;
 }
+
+/* leave buttons’ horizontal alignment to breakpoint CSS */
 main.container fieldset.form-group.text-right{
     text-align: center;
     margin-top: 15px;
 }
+
 main.container fieldset.form-group.text-right input[type="submit"],
-main.container fieldset.form-group.text-right input[type="button"] {
+main.container fieldset.form-group.text-right input[type="button"]{
     min-width: 140px;
     margin-right: 8px;
     margin-left: 8px;
@@ -254,16 +275,24 @@ main.container fieldset.form-group.text-right input[type="button"] {
 .contact-btn[type="reset"]:hover{
     background-color: darkblue;
 }
+
 article h2,
 article p{
     text-align: center;
     margin-left: auto;
     margin-right: auto;
 }
+
 article h2{
     margin-top: 50px;
     font-weight: bold;
 }
+
 article p{
     font-size: 30px;
+}
+@media (max-width: 991px){
+  .navbar-collapse{
+    background-color: rgb(0, 70, 167);
+  }
 }

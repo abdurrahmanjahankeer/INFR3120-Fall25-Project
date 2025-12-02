@@ -1,6 +1,6 @@
 <%- include ('../partials/header') %>
 <%- include ('../partials/main_nav') %>
-<main class="container">
+<main class="container login-container">
     <% if(message.length > 0) { %>
         <div class="alert alter danger">
             <%= message %>
@@ -26,7 +26,7 @@
                     or
                     <a href="/register">Register here</a>
                 </fieldset>
-                <fieldset class="form-group text-right">
+                <fieldset class="form-group text-center">
                     <input type="submit" class="btn btn-success" value="Login">
                     <a href="/"></a>
                     <input type="button" class="btn btn-warning" value="Cancel">

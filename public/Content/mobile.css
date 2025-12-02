@@ -1,0 +1,178 @@
+/* Styleshhet for a Mobile repository device */
+
+body{
+  font-size: 14px;
+}
+
+/* Navbar */
+.navbar{
+  padding: 10px;
+  height: auto;
+}
+
+.navbar-brand img{
+  height: 50px;
+  width: 50px;
+  margin-top: 0;
+}
+
+/* Homepage */
+.homepage-title h1{
+  font-size: 26px;
+}
+
+.bottom-links{
+  padding-bottom: 40px;
+}
+
+.box{
+  width: 80%;
+  height: 56px;
+  margin: 10px auto;
+}
+
+/* About page */
+.about-main{
+  width: 96%;
+  margin: 20px auto 20px auto;
+  padding: 10px 2%;
+}
+
+.center-title{
+  font-size: 30px;
+  margin-bottom: 20px;
+}
+
+.about-row{
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.about-img{
+  width: 120px;
+  height: 120px;
+}
+
+.member-desc{
+  font-size: 18px;
+  margin-top: 16px;
+}
+
+.member-text{
+  font-size: 14px;
+}
+
+.left-item,
+.right-item{
+  display: block;
+  width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+  text-align: center;
+}
+
+/* Contact form */
+article h2{
+  font-size: 24px;
+  margin-top: 20px;
+}
+
+article p{
+  font-size: 16px;
+}
+
+/* Contact buttons */
+.contact-btn{
+  width: 100%;
+  font-size: 18px;
+  margin-right: 0;
+  margin-bottom: 10px;
+}
+
+/* Forms in general */
+form{
+  max-width: 100%;
+  padding: 10px;
+}
+
+/* Main container */
+main.container{
+  max-width: 100%;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+/* Auth forms and CRUD forms */
+main.container .row form{
+  padding: 15px;
+  margin-top: 10px;
+}
+
+main.container h1{
+  font-size: 24px;
+}
+
+/* Login box on mobile */
+.login-container{
+  max-width: 90%;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+/* Make the login form narrower on mobile */
+.login-container .row .col-md-4,
+.login-container .row .offset-md-4{
+  width: 100%;
+  margin-left: 0;
+}
+
+/* Stack Login and Cancel buttons */
+.login-container fieldset.form-group.text-center input.btn-success,
+.login-container fieldset.form-group.text-center input.btn-warning{
+  display: block;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 8px;
+  margin-bottom: 6px;
+}
+
+/* Slightly smaller inputs */
+.login-container input.form-control{
+  height: 40px;
+  font-size: 14px;
+}
+
+/* Typing records table */
+.table{
+  font-size: 12px;
+}
+
+.table th,
+.table td{
+  padding: 6px;
+}
+
+/* Game page */
+#gameIntro h2{
+  font-size: 22px;
+}
+
+#gameIntro p{
+  font-size: 14px;
+}
+
+#gameStats{
+  margin-top: 10px;
+}
+
+#promptDisplay,
+#playerInput{
+  font-size: 14px;
+}
+
+/* Profile picture page */
+main.container img[alt="Current Profile"]{
+  width: 90px;
+  height: 90px;
+}
