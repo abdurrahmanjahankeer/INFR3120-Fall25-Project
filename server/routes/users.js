@@ -39,6 +39,28 @@ router.post(
   upload.single('profileImage'),
   async function (req, res) {
     try {
+      // If user clicked "Remove Profile Picture"
+      if (req.body.removeImage === 'true') {
+        await User.updateOne(
+          { _id: req.user._id },
+          {
+            $unset: { profileImageData: "", profileImageType: "" },
+            $set: { updated: new Date() }
+          }
+        );
+
+        req.user.profileImageData = undefined;
+        req.user.profileImageType = undefined;
+
+        return res.render('account/profile-picture', {
+          title: 'Profile Picture',
+          displayName: req.user.displayName,
+          profileImageUrl: '',
+          message: 'Profile picture removed. Using default avatar.'
+        });
+      }
+
+      // Otherwise, handle normal upload
       if (!req.file) {
         return res.render('account/profile-picture', {
           title: 'Profile Picture',
@@ -61,7 +83,6 @@ router.post(
         }
       );
 
-      // update session user for immediate navbar change
       req.user.profileImageData = req.file.buffer;
       req.user.profileImageType = req.file.mimetype;
 
