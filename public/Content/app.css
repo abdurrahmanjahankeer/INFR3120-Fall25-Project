@@ -8,7 +8,6 @@ body{
     background-color: rgb(0, 70, 167);
     padding: 15px;
     height: 70px;
-    overflow: hidden;
 }
 .navbar-brand img{
     height: 70px;
@@ -37,6 +36,15 @@ body{
     text-decoration: none;
     display: block;
     line-height: 75px;
+}
+.navbar .dropdown-menu{
+  background-color: white;
+  color: black;
+  z-index: 2000;
+  border-radius: 6px;
+}
+.navbar .dropdown-menu .dropdown-item{
+  color: black;
 }
 .box{
     width: 200px;

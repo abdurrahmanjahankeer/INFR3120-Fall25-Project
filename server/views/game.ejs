@@ -1,68 +1,169 @@
 <%- include('partials/header') %>
-  <%- include('partials/main_nav') %>
+<%- include('partials/main_nav') %>
 
-    <main class="container mt-5">
-      <h2 class="text-center">Speed Type Writer Game</h2>
+<main class="container" style="max-width: 1100px; margin-top: 40px; margin-bottom: 40px;">
 
-      <div id="gameIntro" class="text-center mt-3">
-        <p>Press "Start Test" to begin the typing challenge.</p>
-        <% if(typeof displayName=='string' && displayName) { %>
-          <p class="text-muted">Playing as: <strong>
-              <%= displayName %>
-            </strong></p>
-          <% } else { %>
-            <p class="text-warning">Please <a href="/login">login</a> to save your score to the leaderboard!</p>
-            <% } %>
-      </div>
+  <!-- Top title area -->
+  <div style="text-align: center; margin-bottom: 15px;">
+    <h1 style="font-size: 48px; font-weight: bold; margin-bottom: 10px;">
+      ADA Type Writer
+    </h1>
+    <p style="font-size: 18px; margin: 0;">
+      Test your speed and accuracy in a fun typing race.
+    </p>
+  </div>
 
-      <div id="gameControls" class="text-center mt-4">
-        <button id="startTestButton" class="btn btn-primary">Start Test</button>
-        <button id="resetTestButton" class="btn btn-secondary" disabled>Reset</button>
-      </div>
+  <!-- Instructions toggle button -->
+  <div style="text-align: center; margin-bottom: 20px;">
+    <button id="instructionsToggle"
+            class="btn btn-info"
+            type="button"
+            style="font-size: 16px; padding: 8px 20px; border-radius: 20px;">
+      <i class="fas fa-question-circle"></i> How to Play
+    </button>
+  </div>
 
-      <div id="gameStats" class="row mt-4" style="display:none;">
-        <div class="col-md-4 text-center">
-          <strong>Time Left:</strong> <span id="timeLeftDisplay">60</span> s
-        </div>
-        <div class="col-md-4 text-center">
-          <strong>Words Per Minute:</strong> <span id="wpmDisplay">0</span>
-        </div>
-        <div class="col-md-4 text-center">
-          <strong>Accuracy:</strong> <span id="accuracyDisplay">0</span> %
-        </div>
-      </div>
+  <!-- Instructions panel -->
+  <div id="instructionsPanel"
+       class="alert alert-info"
+       style="max-width: 900px; margin: 0 auto 25px auto; display: none; text-align: left;">
+    <h4 style="margin-top: 0; margin-bottom: 8px;">Game Instructions</h4>
+    <ul style="padding-left: 18px; margin-bottom: 6px;">
+      <li>When you are ready, click <strong>Start Test</strong> to begin the timer.</li>
+      <li>As you type, any character that turns <span style="color: green; font-weight: bold;">green</span> is correct and in the right position.</li>
+      <li>If a character turns <span style="color: red; font-weight: bold;">red</span>, the character you entered in that spot does not match the prompt.</li>
+    </ul>
+    <p style="margin: 0;">Try to finish the prompt as quickly and accurately as possible.</p>
+  </div>
 
-      <div id="gamePromptWrapper" class="mt-4" style="display:none;">
-        <label for="promptDisplay"><strong>Text To Type:</strong></label>
-        <div id="promptDisplay" class="border rounded p-3"
-          style="min-height:80px; font-family: 'Courier New', monospace; font-size: 18px; line-height: 1.6; user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;">
-        </div>
-      </div>
+  <!-- Letter banner row (Font Awesome) -->
+  <div style="width: 100%; text-align: center; margin-bottom: 25px;">
+    <span style="font-size: 52px; color: blue; margin-right: 12px;">
+      <i class="fas fa-letter-a"></i>
+    </span>
+    <span style="font-size: 40px; color: green; margin-right: 10px;">
+      <i class="fas fa-font"></i>
+    </span>
+    <span style="font-size: 46px; color: purple; margin-right: 10px;">
+      <i class="fas fa-keyboard"></i>
+    </span>
+    <span style="font-size: 40px; color: red; margin-right: 10px;">
+      <i class="fas fa-font"></i>
+    </span>
+    <span style="font-size: 52px; color: red;">
+      <i class="fas fa-letter-r"></i>
+    </span>
+  </div>
 
-      <div id="gameInputWrapper" class="mt-4" style="display:none;">
-        <label for="playerInput"><strong>Your Typing:</strong></label>
-        <textarea id="playerInput" class="form-control" rows="4" placeholder="Start typing here when the test begins..."
-          disabled style="font-family: 'Courier New', monospace; font-size: 18px; line-height: 1.6;"></textarea>
-      </div>
+  <!-- Main card -->
+  <div style="background-color: white; border-radius: 15px; border: 2px solid rgb(0,70,167); padding: 25px 20px 30px 20px;">
 
-      <div id="gameResultMessage" class="mt-4 text-center alert alert-success" style="display:none;"></div>
-      <div id="gameMistakeBox" class="mt-2 text-center alert alert-danger" style="display:none;"></div>
+    <!-- Game heading + intro -->
+    <div id="gameIntro" style="text-align: center; margin-bottom: 25px;">
+      <h2 style="font-size: 30px; margin-bottom: 10px;">Speed Type Writer Game</h2>
+      <p style="margin-bottom: 8px;">Press <strong>"Start Test"</strong> to begin the typing challenge.</p>
 
-      <!-- Hidden form for auto-submitting to leaderboard -->
       <% if(typeof displayName=='string' && displayName) { %>
-        <form id="addTypingRecordForm" action="/typingRecords/add" method="post" style="display:none;">
-          <input type="text" id="usernameTextField" name="username"
-            value="<%= typeof req !== 'undefined' && req.user && req.user.username ? req.user.username : displayName %>">
-          <input type="number" id="wpmTextField" name="wordsPerMinute">
-          <input type="number" id="accuracyTextField" name="accuracy">
-          <input type="number" id="timeTextField" name="timeTaken">
-          <textarea id="textPromptTextArea" name="textPrompt"></textarea>
-        </form>
-        <% } %>
-    </main>
+        <p class="text-muted" style="margin-bottom: 0;">
+          Playing as: <strong><%= displayName %></strong>
+        </p>
+      <% } else { %>
+        <p class="text-warning" style="margin-bottom: 0;">
+          Please <a href="/login">login</a> to save your score to the leaderboard!
+        </p>
+      <% } %>
+    </div>
 
-    <%- include('partials/footer') %>
-    <script>
-      // Pass displayName to frontend for auto-submit
-      window.displayName = "<%= displayName %>";
-    </script>
+    <!-- Decorative “road” progress bar -->
+    <div style="width: 100%; height: 14px; background-color: rgb(220,220,220); border-radius: 7px; margin: 0 auto 25px auto;">
+      <div style="width: 40%; height: 100%; background-color: rgb(0,70,167); border-radius: 7px;"></div>
+    </div>
+
+    <!-- Start / Reset buttons -->
+    <div id="gameControls" style="text-align: center; margin-bottom: 20px;">
+      <button id="startTestButton"
+              class="btn"
+              style="background-color: green; color: white; padding: 12px 40px; font-size: 22px; font-weight: bold; border-radius: 30px; border: none; margin-right: 10px;">
+        <i class="fas fa-play-circle"></i> Start
+      </button>
+
+      <button id="resetTestButton"
+              class="btn"
+              disabled
+              style="background-color: purple; color: white; padding: 12px 40px; font-size: 22px; font-weight: bold; border-radius: 30px; border: none;">
+        <i class="fas fa-undo"></i> Reset
+      </button>
+    </div>
+
+    <!-- Small hint row -->
+    <div style="text-align: center; margin-bottom: 10px;">
+      <span style="font-size: 14px; color: gray;">
+        When the test starts, your prompt and typing area will appear below.
+      </span>
+    </div>
+
+    <!-- Hidden game area (unchanged) -->
+    <div id="gameStats" class="row mt-4" style="display:none;">
+      <div class="col-md-4 text-center">
+        <strong>Time Left:</strong> <span id="timeLeftDisplay">60</span> s
+      </div>
+      <div class="col-md-4 text-center">
+        <strong>Words Per Minute:</strong> <span id="wpmDisplay">0</span>
+      </div>
+      <div class="col-md-4 text-center">
+        <strong>Accuracy:</strong> <span id="accuracyDisplay">0</span> %
+      </div>
+    </div>
+
+    <div id="gamePromptWrapper" class="mt-4" style="display:none;">
+      <label for="promptDisplay"><strong>Text To Type:</strong></label>
+      <div id="promptDisplay" class="border rounded p-3"
+           style="min-height:80px; font-family: 'Courier New', monospace; font-size: 18px; line-height: 1.6; user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;">
+      </div>
+    </div>
+
+    <div id="gameInputWrapper" class="mt-4" style="display:none;">
+      <label for="playerInput"><strong>Your Typing:</strong></label>
+      <textarea id="playerInput" class="form-control" rows="4"
+                placeholder="Start typing here when the test begins..."
+                disabled
+                style="font-family: 'Courier New', monospace; font-size: 18px; line-height: 1.6;"></textarea>
+    </div>
+
+    <div id="gameResultMessage" class="mt-4 text-center alert alert-success" style="display:none;"></div>
+    <div id="gameMistakeBox" class="mt-2 text-center alert alert-danger" style="display:none;"></div>
+
+    <% if(typeof displayName=='string' && displayName) { %>
+      <form id="addTypingRecordForm" action="/typingRecords/add" method="post" style="display:none;">
+        <input type="text" id="usernameTextField" name="username"
+               value="<%= typeof req !== 'undefined' && req.user && req.user.username ? req.user.username : displayName %>">
+        <input type="number" id="wpmTextField" name="wordsPerMinute">
+        <input type="number" id="accuracyTextField" name="accuracy">
+        <input type="number" id="timeTextField" name="timeTaken">
+        <textarea id="textPromptTextArea" name="textPrompt"></textarea>
+      </form>
+    <% } %>
+
+  </div>
+</main>
+
+<%- include('partials/footer') %>
+
+<script>
+  window.displayName = "<%= displayName %>";
+
+  // Simple show/hide for instructions panel
+  (function () {
+    var toggleBtn = document.getElementById('instructionsToggle');
+    var panel = document.getElementById('instructionsPanel');
+    if (toggleBtn && panel) {
+      toggleBtn.addEventListener('click', function () {
+        if (panel.style.display === 'none' || panel.style.display === '') {
+          panel.style.display = 'block';
+        } else {
+          panel.style.display = 'none';
+        }
+      });
+    }
+  })();
+</script>

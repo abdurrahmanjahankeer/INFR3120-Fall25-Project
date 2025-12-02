@@ -1,0 +1,31 @@
+<%- include ('../partials/header') %>
+<%- include ('../partials/main_nav') %>
+
+<main class="container" style="max-width: 700px; margin-top: 40px; margin-bottom: 40px;">
+  <h2 class="text-center mb-4">Upload Profile Picture</h2>
+
+  <% if (typeof message === 'string' && message) { %>
+    <div class="alert alert-info text-center"><%= message %></div>
+  <% } %>
+
+  <div class="text-center mb-3">
+    <% if (profileImageUrl) { %>
+      <img src="<%= profileImageUrl %>"
+           alt="Current Profile"
+           style="width:120px; height:120px; border-radius:50%; border:2px solid #ccc;">
+    <% } else { %>
+      <i class="fas fa-user-circle" style="font-size:120px; color:#aaa;"></i>
+    <% } %>
+  </div>
+
+  <form action="/users/profile-picture" method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+      <label for="profileImage" class="form-label">Choose a new profile image</label>
+      <input type="file" class="form-control" id="profileImage" name="profileImage" accept="image/*" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Upload</button>
+    <a href="/" class="btn btn-secondary">Cancel</a>
+  </form>
+</main>
+
+<%- include ('../partials/footer.ejs') %>
