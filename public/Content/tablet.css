@@ -22,7 +22,11 @@ body{
 }
 
 .bottom-links{
-  padding-bottom: 70px;
+  padding-bottom: 0px;
+}
+#homepageLogoWrapper{
+margin-top: -100;
+margin-bottom: 10px;
 }
 
 .box{

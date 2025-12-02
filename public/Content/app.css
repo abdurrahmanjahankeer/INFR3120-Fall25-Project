@@ -37,20 +37,22 @@ body{
 }
 
 .navbar .dropdown-menu{
-  background-color: white;
-  color: black;
-  z-index: 2000;
-  border-radius: 6px;
+    background-color: white;
+    color: black;
+    z-index: 2000;
+    border-radius: 6px;
 }
 
 .navbar .dropdown-menu .dropdown-item{
-  color: black;
+    color: black;
 }
 
 .box{
     text-align: center;
     background-color: black;
     border-radius: 75px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .box:hover{
@@ -295,4 +297,13 @@ article p{
   .navbar-collapse{
     background-color: rgb(0, 70, 167);
   }
+}
+#homepageLogoWrapper{
+text-align: center;
+}
+
+#homepageLogoWrapper img{
+width: 300px;
+height: 300px;
+border-radius: 50%;
 }

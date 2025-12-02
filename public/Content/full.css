@@ -32,6 +32,11 @@ body{
   margin-bottom: 80px;
 }
 
+#homepageLogoWrapper{
+  margin-top: -195px;
+  margin-bottom: -20px;
+}
+
 .box{
   width: 240px;
   height: 70px;
