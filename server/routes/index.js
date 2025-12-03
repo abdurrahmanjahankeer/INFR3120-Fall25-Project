@@ -152,7 +152,7 @@ router.get('/auth/github/callback',
 
 /* LinkedIn OAuth Routes */
 router.get('/auth/linkedin',
-  passport.authenticate('linkedin', { scope: ['r_emailaddress', 'r_liteprofile'] })
+  passport.authenticate('linkedin', { scope: ['openid', 'profile', 'email'] })
 );
 
 router.get('/auth/linkedin/callback',
