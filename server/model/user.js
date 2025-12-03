@@ -14,7 +14,6 @@ let User = mongoose.Schema({
     type: String,
     default: "",
     trim: true,
-    required: 'email is required'
   },
   displayName:
   {
@@ -43,6 +42,16 @@ let User = mongoose.Schema({
     default: ""
   },
   githubId:
+  {
+    type: String,
+    default: ""
+  },
+  linkedinId:
+  {
+    type: String,
+    default: ""
+  },
+  discordId:
   {
     type: String,
     default: ""

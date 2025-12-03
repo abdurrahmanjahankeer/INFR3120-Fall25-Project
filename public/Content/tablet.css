@@ -112,9 +112,11 @@ main.container h1{
 
 .login-container{
   max-width: 600px;
-  width: 80%;
+  width: 70%;
   margin-top: 40px;
   margin-bottom: 40px;
+  margin-left: auto;
+  margin-right: auto;
 }
 .login-container fieldset.form-group.text-right input.btn-success,
 .login-container fieldset.form-group.text-right input.btn-warning{
@@ -122,6 +124,37 @@ main.container h1{
   width: 70%;
   text-align: center;
   margin-top: 8px;
+  margin-bottom: 6px;
+}
+.login-container .row{
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.login-container .row .col-md-4,
+.login-container .row .offset-md-4{
+  float: none;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+/* Space out each fieldset a bit more */
+.login-container fieldset.form-group{
+  margin-bottom: 18px;
+}
+
+/* Social login section: extra top margin */
+.login-container fieldset.form-group.text-center.mt-3{
+  margin-top: 24px;
+}
+
+/* Make social buttons wrap nicely with gaps */
+.login-container fieldset.form-group.text-center a.btn{
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 6px;
   margin-bottom: 6px;
 }
 

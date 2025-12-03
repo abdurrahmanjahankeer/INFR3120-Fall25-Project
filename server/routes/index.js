@@ -150,6 +150,30 @@ router.get('/auth/github/callback',
   }
 );
 
+/* LinkedIn OAuth Routes */
+router.get('/auth/linkedin',
+  passport.authenticate('linkedin', { scope: ['r_emailaddress', 'r_liteprofile'] })
+);
+
+router.get('/auth/linkedin/callback',
+  passport.authenticate('linkedin', { failureRedirect: '/login', failureFlash: true }),
+  function (req, res) {
+    return res.redirect('/typingRecords');
+  }
+);
+
+/* Discord OAuth Routes */
+router.get('/auth/discord',
+  passport.authenticate('discord', { scope: ['identify', 'email'] })
+);
+
+router.get('/auth/discord/callback',
+  passport.authenticate('discord', { failureRedirect: '/login', failureFlash: true }),
+  function (req, res) {
+    return res.redirect('/typingRecords');
+  }
+);
+
 /* Logout */
 router.get('/logout',function(req,res,next){
   req.logout(function(err){

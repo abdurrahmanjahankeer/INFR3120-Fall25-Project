@@ -101,7 +101,7 @@ form{
 
 /* Main container */
 main.container{
-  max-width: 100%;
+  width: 100%;
   margin-top: 20px;
   margin-bottom: 30px;
 }
@@ -119,18 +119,25 @@ main.container h1{
 /* Login box on mobile */
 .login-container{
   max-width: 90%;
+  width: 85%;
   margin-top: 30px;
   margin-bottom: 30px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/* Make the login form narrower on mobile */
+.login-container .row{
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
 .login-container .row .col-md-4,
 .login-container .row .offset-md-4{
   width: 100%;
-  margin-left: 0;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/* Stack Login and Cancel buttons */
 .login-container fieldset.form-group.text-center input.btn-success,
 .login-container fieldset.form-group.text-center input.btn-warning{
   display: block;
@@ -141,7 +148,19 @@ main.container h1{
   margin-bottom: 6px;
 }
 
-/* Slightly smaller inputs */
+.login-container fieldset.form-group.text-center.mt-3 a.btn{
+  display: block;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+
+.login-container fieldset.form-group{
+  margin-bottom: 14px;
+}
+
 .login-container input.form-control{
   height: 40px;
   font-size: 14px;
@@ -149,12 +168,41 @@ main.container h1{
 
 /* Typing records table */
 .table{
-  font-size: 12px;
+  font-size: 10px;
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .table th,
 .table td{
-  padding: 6px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
+.table thead th{
+  font-size: 10px;
+}
+
+.table th:nth-child(1),
+.table td:nth-child(1),
+.table th:nth-child(3),
+.table td:nth-child(3),
+.table th:nth-child(4),
+.table td:nth-child(4),
+.table th:nth-child(5),
+.table td:nth-child(5){
+  width: 40px;
+}
+
+.table th:nth-child(2), .table td:nth-child(2){
+  max-width: 80px;
+}
+
+.table th:nth-child(6), .table td:nth-child(6){
+  max-width: 110px;
 }
 
 /* Game page */
@@ -179,4 +227,25 @@ main.container h1{
 main.container img[alt="Current Profile"]{
   width: 90px;
   height: 90px;
+}
+
+header, .navbar, footer{
+  width: 100%;
+}
+
+
+/* Extra sizing for very small widths (320–375px) */
+@media only screen and (max-width: 390px){
+  body{
+    margin: 0;
+    padding: 0;
+  }
+
+  main.container{
+    width: 100%;
+  }
+
+  header, .navbar, footer{
+    width: 390px;
+  }
 }

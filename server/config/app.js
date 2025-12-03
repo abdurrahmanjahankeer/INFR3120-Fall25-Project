@@ -10,6 +10,8 @@ let passportLocal = require('passport-local');
 let localStrategy = passportLocal.Strategy;
 let GoogleStrategy = require('passport-google-oauth20').Strategy;
 let GitHubStrategy = require('passport-github2').Strategy;
+let LinkedInStrategy = require('passport-linkedin-oauth2').Strategy;
+let DiscordStrategy = require('passport-discord').Strategy;
 require('dotenv').config();   
 let flash = require('connect-flash');
 let cors = require('cors');
@@ -108,6 +110,77 @@ passport.use(new GitHubStrategy(
         await existingUser.save();
       } else if (!existingUser.githubId) {
         existingUser.githubId = profile.id;
+        await existingUser.save();
+      }
+
+      return done(null, existingUser);
+    } catch (err) {
+      return done(err, null);
+    }
+  }
+));
+
+// LinkedIn OAuth Strategy
+passport.use(new LinkedInStrategy(
+  {
+    clientID: process.env.LINKEDIN_CLIENT_ID,
+    clientSecret: process.env.LINKEDIN_CLIENT_SECRET,
+    callbackURL: process.env.LINKEDIN_CALLBACK_URL,
+    state: true
+  },
+  async function (accessToken, refreshToken, profile, done) {
+    try {
+      let existingUser = await User.findOne({ linkedinId: profile.id });
+
+      if (!existingUser && profile.emails && profile.emails.length > 0) {
+        existingUser = await User.findOne({ email: profile.emails[0].value });
+      }
+
+      if (!existingUser) {
+        existingUser = new User({
+          username: profile.emails && profile.emails.length > 0 ? profile.emails[0].value : profile.id,
+          email: profile.emails && profile.emails.length > 0 ? profile.emails[0].value : "",
+          displayName: profile.displayName || (profile.name && profile.name.givenName) || "LinkedIn User",
+          linkedinId: profile.id
+        });
+        await existingUser.save();
+      } else if (!existingUser.linkedinId) {
+        existingUser.linkedinId = profile.id;
+        await existingUser.save();
+      }
+
+      return done(null, existingUser);
+    } catch (err) {
+      return done(err, null);
+    }
+  }
+));
+
+// Discord OAuth Strategy
+passport.use(new DiscordStrategy(
+  {
+    clientID: process.env.DISCORD_CLIENT_ID,
+    clientSecret: process.env.DISCORD_CLIENT_SECRET,
+    callbackURL: process.env.DISCORD_CALLBACK_URL
+  },
+  async function (accessToken, refreshToken, profile, done) {
+    try {
+      let existingUser = await User.findOne({ discordId: profile.id });
+
+      if (!existingUser && profile.email) {
+        existingUser = await User.findOne({ email: profile.email });
+      }
+
+      if (!existingUser) {
+        existingUser = new User({
+          username: profile.username || profile.id,
+          email: profile.email || "",
+          displayName: profile.username || "Discord User",
+          discordId: profile.id
+        });
+        await existingUser.save();
+      } else if (!existingUser.discordId) {
+        existingUser.discordId = profile.id;
         await existingUser.save();
       }
 
