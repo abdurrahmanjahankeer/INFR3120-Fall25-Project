@@ -15,13 +15,21 @@ Live render Link: https://infr3120-fall25-project-ul3b.onrender.com/
 ## Page That We Have:
 
 Home Page
+
 About Us Page
+
 Leaderboard Page
+
 Contact Page
+
 Login Page
+
 Reset / Change Password Page
+
 Upload Profile Picture Page
+
 Add a Record Page
+
 Game Page
 
 ## Stylesheets:
